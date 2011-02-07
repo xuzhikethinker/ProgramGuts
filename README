@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+This is the README fgfile 
+This file is empty
+Is this correct? What is happenning?
+=======
 This is the README file
 
 Hey - Dan Waz
@@ -7,5 +12,11 @@ Changes...
 edit by afavia
 
 First change by Jack
+<<<<<<< HEAD
+>>>>>>> 0a6a0b442f97a7528a9eb9611787cadfca5282a4
+=======
 
 Second change by Jack
+
+>>>>>>> 66b1964598ef20c1ae5041ac365afeb61700330e
+Elvin did this
