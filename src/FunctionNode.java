@@ -31,7 +31,7 @@ public class FunctionNode extends Node {
 	}
 	
 	public void drawNode(Graphics g){
-        g.drawOval(0, 0, 100, 50); //draws node at origin
+        g.drawRect(0, 0, 100, 100); //draws node at origin
         //g.drawString(name, 0, 0);
     }
 	
