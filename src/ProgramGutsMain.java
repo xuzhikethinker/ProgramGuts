@@ -1,5 +1,7 @@
 import java.util.Vector;
 
+import javax.swing.JFrame;
+
 
 public class ProgramGutsMain {
 	
@@ -7,6 +9,14 @@ public class ProgramGutsMain {
 	static GraphViewer gv;
 
 	public static void main(String args[]) {
+		/* set up frame */
+		JFrame f = new JFrame("VisiGuts");
+		
+		f.setSize(800, 600);
+        f.setVisible(true);
+        f.pack();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
 		bd = new BuilderDebugger();
 		
 		//builder/debugger part
@@ -16,7 +26,12 @@ public class ProgramGutsMain {
 		//gv = new GraphViewer( bd.getGraph() );
 		
 		// test graph to draw
-		gv = new GraphViewer( sampleGraph() );
+		gv = new GraphViewer(sampleGraph());
+		
+		/* add graph viewer to the frame */ 
+		f.add(gv);
+		gv.repaint();
+		
 
 	}
 	
