@@ -1,3 +1,6 @@
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.Vector;
 
 /*
@@ -12,9 +15,25 @@ import java.util.Vector;
  * 
  */
 
-public class GraphViewer {
+public class GraphViewer extends Canvas {
 	
-	public GraphViewer(Vector<Node> graph) {
-		
-	}
+	Vector<Node> graph = new Vector<Node>();
+
+    public GraphViewer() {
+	        this.setSize(800,600);
+            this.setBackground(Color.white);
+    }
+    public GraphViewer(Vector<Node> graph) {
+    		this.graph = graph;
+            this.setSize(800,600);
+            this.setBackground(Color.white);
+    }
+    
+    @Override
+    public void paint(Graphics g)
+    {
+         for(Node n: graph)
+                n.drawNode(g);
+    }
+
 }

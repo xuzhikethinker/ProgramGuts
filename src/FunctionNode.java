@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.util.Vector;
 
 /*
@@ -15,16 +16,24 @@ public class FunctionNode extends Node {
 
 	FunctionNode calledFrom;
 	Vector<ObjectNode> ObjectsConnectedTo;
+	String name;
 	
 	public FunctionNode() {
 		this.calledFrom = null; 
+		name = "main";
 		ObjectsConnectedTo = new Vector<ObjectNode>(); 
 	}
 	
-	public FunctionNode(FunctionNode calledFrom) {
+	public FunctionNode(FunctionNode calledFrom, String name) {
 		this.calledFrom = calledFrom; 
+		this.name = name;
 		ObjectsConnectedTo = new Vector<ObjectNode>(); 
 	}
+	
+	public void drawNode(Graphics g){
+        g.drawOval(0, 0, 100, 50); //draws node at origin
+        //g.drawString(name, 0, 0);
+    }
 	
 	
 	

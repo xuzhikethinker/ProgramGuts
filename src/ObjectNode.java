@@ -1,3 +1,4 @@
+import java.awt.Graphics;
 import java.util.Vector;
 
 /*
@@ -15,5 +16,16 @@ public class ObjectNode extends Node {
 	public ObjectNode() {
 		ObjectsConnectedTo = new Vector<ObjectNode>(); 
 	}
+	
 
+	public void AddConnection(ObjectNode connectedTo)
+	{
+		this.ObjectsConnectedTo.add(connectedTo);
+	}
+	
+	public void drawNode(Graphics g){
+        
+        g.drawRect(0,0,100,100); //draws at origin 
+        //g.drawString(objName, 65, 65);
+    }
 }

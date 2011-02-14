@@ -3,7 +3,7 @@ import com.sun.jdi.*;
 import com.sun.jdi.connect.*;
 
 
-/*
+/**
  * This is where the debugging and graph builder guys will put 
  * all of their code.
  * 
@@ -36,5 +36,21 @@ public class BuilderDebugger {
 	public Vector<Node> getGraph()
 	{
 		return progGraph;
+	}
+	
+	//can use this func to add more objects nodes to the graph
+	public void AddObjectNode()
+	{
+		ObjectNode newObject = new ObjectNode();
+		
+		progGraph.add(newObject);
+	}
+	
+	//can use this func to add more function nodes to the graph
+	public void AddFunctionNode(FunctionNode calledFrom, String name)
+	{
+		FunctionNode newFunction = new FunctionNode(calledFrom, name);
+		
+		progGraph.add(newFunction);
 	}
 }
