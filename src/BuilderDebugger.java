@@ -45,6 +45,13 @@ public class BuilderDebugger {
 		
 		progGraph.add(newObject);
 	}
+    
+       //creates a connection(edge)  b/w Object nodes
+	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to)
+	{
+		to.ObjectsConnectedTo.add(from);
+                from.ObjectsConnectedTo.add(to);
+	}
 	
 	//can use this func to add more function nodes to the graph
 	public void AddFunctionNode(FunctionNode calledFrom, String name)
@@ -52,5 +59,11 @@ public class BuilderDebugger {
 		FunctionNode newFunction = new FunctionNode(calledFrom, name);
 		
 		progGraph.add(newFunction);
+	}
+
+       //creates a connection (edge)  b/w a function node and Object node
+	public void AddFunctionToObjectNodeConnection(FunctionNode from, ObjectNode to)
+	{
+                from.ObjectsConnectedTo.add(to);
 	}
 }
