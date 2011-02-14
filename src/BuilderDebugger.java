@@ -1,4 +1,7 @@
 import java.util.Vector;
+import com.sun.jdi.*;
+import com.sun.jdi.connect.*;
+
 
 /*
  * This is where the debugging and graph builder guys will put 
