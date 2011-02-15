@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-*/
-import java.io.*;
 
+import java.io.*;
+*/
 
 /**
  * This is where the debugging and graph builder guys will put 
@@ -56,11 +56,6 @@ public class BuilderDebugger {
 
 	}
 
-
-
-
-
-
 //Nick added this:
         
         int VectorCount = 0;
@@ -78,22 +73,6 @@ public class BuilderDebugger {
         
         //Done with Nick's addition
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
 	// returns graph to main when called to pass to drawing part
 	public Vector<Node> getGraph()
@@ -102,9 +81,9 @@ public class BuilderDebugger {
 	}
 	
 	//can use this func to add more objects nodes to the graph
-	public void AddObjectNode()
+	public void AddObjectNode(String name)
 	{
-		ObjectNode newObject = new ObjectNode();
+		ObjectNode newObject = new ObjectNode(name);
 		
 		progGraph.add(newObject);
 	}

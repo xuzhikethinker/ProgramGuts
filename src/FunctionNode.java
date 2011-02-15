@@ -30,6 +30,11 @@ public class FunctionNode extends Node {
 		ObjectsConnectedTo = new Vector<ObjectNode>(); 
 	}
 	
+	public void AddConnectionToObject(ObjectNode connectedTo)
+	{
+		this.ObjectsConnectedTo.add(connectedTo);
+	}
+	
 	public void drawNode(Graphics g){
         g.drawRect(0, 0, 100, 100); //draws node at origin
         //g.drawString(name, 0, 0);
