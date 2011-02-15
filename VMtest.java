@@ -1,3 +1,5 @@
+//Code from http://illegalargumentexception.blogspot.com/2009/03/java-using-jpda-to-write-debugger.html
+
 //package com.google.code.maven2.plugins.hotswap;
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.ReferenceType;
