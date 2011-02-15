@@ -15,6 +15,9 @@ import java.util.Vector;
  * 
  */
 
+@SuppressWarnings("serial")
+
+
 public class GraphViewer extends Canvas {
 	
 	Vector<Node> graph = new Vector<Node>();
