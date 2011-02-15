@@ -48,7 +48,52 @@ public class BuilderDebugger {
 	// entrance point from main class
 	public void DebugProgram() {
 		
+
+            //Line below calls given program name and finds all class instances (puts them in a vector)
+            //Needs to be given a program name. Ex:  new Main().getClassName();
+            
+            //Note to self: could call higher program priorities, like package, and work my way down...maybe???
+
 	}
+
+
+
+
+
+
+//Nick added this:
+        
+        int VectorCount = 0;
+        
+        public void getClassName() {
+            
+            Object className = new Exception().getStackTrace()[VectorCount].getClassName().toString();
+            
+            progGraph.add(VectorCount,(Node) className);
+            
+            VectorCount = VectorCount++;
+            
+           System.out.println (new Exception().getStackTrace()[0].getClassName());
+    }
+        
+        //Done with Nick's addition
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	// returns graph to main when called to pass to drawing part
 	public Vector<Node> getGraph()
