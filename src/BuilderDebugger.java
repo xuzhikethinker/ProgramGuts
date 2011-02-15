@@ -1,5 +1,5 @@
 import java.util.Vector;
-/*
+
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.ReferenceType;
 import com.sun.jdi.VirtualMachine;
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import java.io.*;
-*/
 
 /**
  * This is where the debugging and graph builder guys will put 
@@ -33,10 +32,10 @@ import java.io.*;
  * Functions should be represented by a rectangles and objects are circles
  * 
  */
-
 public class BuilderDebugger {
 
 	Vector<Node> progGraph;
+	int VectorCount = 0;
 	
 	public BuilderDebugger() {
 		progGraph = new Vector<Node>();
@@ -45,7 +44,9 @@ public class BuilderDebugger {
 		progGraph.add( new FunctionNode() );
 	}
 	
-	// entrance point from main class
+	/**
+	 *  entrance point into debugger part from main class
+	 */
 	public void DebugProgram() {
 		
 
@@ -56,31 +57,31 @@ public class BuilderDebugger {
 
 	}
 
-//Nick added this:
-        
-        int VectorCount = 0;
-        
-        public void getClassName() {
-            
-            Object className = new Exception().getStackTrace()[VectorCount].getClassName().toString();
-            
-            progGraph.add(VectorCount,(Node) className);
-            
-            VectorCount = VectorCount++;
-            
-           System.out.println (new Exception().getStackTrace()[0].getClassName());
-    }
-        
-        //Done with Nick's addition
 
-	
-	// returns graph to main when called to pass to drawing part
+    public void getClassName() {
+        
+        Object className = new Exception().getStackTrace()[VectorCount].getClassName().toString();
+        
+        progGraph.add(VectorCount,(Node) className);
+        
+        VectorCount = VectorCount++;
+        
+       System.out.println (new Exception().getStackTrace()[0].getClassName());
+    }
+        	
+	/**
+	 *  returns graph to main when called to pass to drawing part
+	 */
 	public Vector<Node> getGraph()
 	{
 		return progGraph;
 	}
 	
-	//can use this func to add more objects nodes to the graph
+	/**
+	 * can use this func to add more objects nodes to the graph
+	 * 
+	 * @param name
+	 */
 	public void AddObjectNode(String name)
 	{
 		ObjectNode newObject = new ObjectNode(name);
@@ -88,14 +89,20 @@ public class BuilderDebugger {
 		progGraph.add(newObject);
 	}
     
-       //creates a connection(edge)  b/w Object nodes
+    /**
+     * creates a connection(edge)  b/w Object nodes
+     * @param from
+     * @param to
+     */
 	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to)
 	{
 		to.ObjectsConnectedTo.add(from);
-                from.ObjectsConnectedTo.add(to);
+        from.ObjectsConnectedTo.add(to);
 	}
 	
-	//can use this func to add more function nodes to the graph
+	/**
+	 * can use this func to add more function nodes to the graph
+	 */
 	public void AddFunctionNode(FunctionNode calledFrom, String name)
 	{
 		FunctionNode newFunction = new FunctionNode(calledFrom, name);
@@ -103,9 +110,13 @@ public class BuilderDebugger {
 		progGraph.add(newFunction);
 	}
 
-       //creates a connection (edge)  b/w a function node and Object node
+    /**
+     * creates a connection (edge)  b/w a function node and Object node
+     * @param from
+     * @param to
+     */
 	public void AddFunctionToObjectNodeConnection(FunctionNode from, ObjectNode to)
 	{
-                from.ObjectsConnectedTo.add(to);
+		from.ObjectsConnectedTo.add(to);
 	}
 }

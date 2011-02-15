@@ -3,12 +3,19 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
-
+/**
+ * main controller for ProgramGuts program
+ * @author afavia.student
+ *
+ */
 public class ProgramGutsMain {
 	
 	static BuilderDebugger bd;
 	static GraphViewer gv;
 
+	/**
+	 * main function
+	 */
 	public static void main(String args[]) {
 		/* set up frame */
 		JFrame f = new JFrame("VisiGuts");
@@ -40,6 +47,12 @@ public class ProgramGutsMain {
 		gv.repaint();
 	}
 	
+	/**
+	 * Test function that generates a test graph 
+	 * passed to the GraphViewer class.
+	 * 
+	 * @return Vector<Node>
+	 */
 	public static Vector<Node> sampleGraph() {
 		Vector<Node> graph = new Vector<Node>();
 		
