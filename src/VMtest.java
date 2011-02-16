@@ -12,7 +12,7 @@ import com.sun.jdi.connect.Transport;
 import com.sun.jdi.*;
 import com.sun.jdi.connect.*;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
-
+import com.sun.jdi.request.*;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import java.io.*;
 
  public class VMtest {
 
-  public VirtualMachine connect(int port)
+  public static VirtualMachine connect(int port)
       throws IOException {
     String strPort = Integer.toString(port);
     AttachingConnector connector = getConnector();
@@ -34,7 +34,7 @@ import java.io.*;
     }
   }
 
-  private AttachingConnector getConnector() {
+  private static AttachingConnector getConnector() {
     VirtualMachineManager vmManager = Bootstrap
         .virtualMachineManager();
     for (Connector connector : vmManager
@@ -48,7 +48,7 @@ import java.io.*;
     throw new IllegalStateException();
   }
 
-  private VirtualMachine connect(
+  private static VirtualMachine connect(
       AttachingConnector connector, String port)
       throws IllegalConnectorArgumentsException,
       IOException {
@@ -62,12 +62,20 @@ import java.io.*;
 
     return connector.attach(args);
   }
+/*
   public static void main(String [] args) 
   {		
  	
 //    AttachingConnector connector = getConnector();
-  //    VirtualMachine v = connect(8000);
-   System.out.print("Test");
-  }
+      try{
+//	VirtualMachine v = connect(8000);
+	VirtualMachine vm = new VMtest().connect(8000);
 
+   	System.out.print("Test");
+	}catch (IOException e)
+  	{
+            e.printStackTrace();
+        }
+  }
+*/
 }
