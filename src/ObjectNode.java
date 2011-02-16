@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.util.Random;
 import java.util.Vector;
 
 /*
@@ -24,8 +25,8 @@ public class ObjectNode extends Node {
 	}
 	
 	public void drawNode(Graphics g){
-        
-        g.drawRect(0,0,100,100); //draws at origin 
+        Random r = new Random();
+        g.drawRect(r.nextInt(800),r.nextInt(600),50,50); //draws at origin 
         //g.drawString(objName, 65, 65);
     }
 }

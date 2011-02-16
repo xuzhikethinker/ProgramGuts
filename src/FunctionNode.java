@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.util.Random;
 import java.util.Vector;
 
 /*
@@ -31,7 +32,8 @@ public class FunctionNode extends Node {
 	}
 	
 	public void drawNode(Graphics g){
-        g.drawOval(0, 0, 100, 50); //draws node at origin
+		Random r = new Random();
+        g.drawOval(r.nextInt(800), r.nextInt(600), 50, 25); //draws node at origin
         //g.drawString(name, 0, 0);
     }
 	
