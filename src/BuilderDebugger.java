@@ -1,5 +1,5 @@
 import java.util.Vector;
-/*
+
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.ReferenceType;
 import com.sun.jdi.VirtualMachine;
@@ -11,7 +11,6 @@ import com.sun.jdi.connect.Transport;
 import com.sun.jdi.*;
 import com.sun.jdi.connect.*;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
-*/
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -37,7 +36,6 @@ public class BuilderDebugger {
 
 	Vector<Node> progGraph;
 	int VectorCount = 0;
-	
 	
 	public BuilderDebugger() {
 		progGraph = new Vector<Node>();
@@ -105,9 +103,9 @@ public class BuilderDebugger {
 	/**
 	 * can use this func to add more function nodes to the graph
 	 */
-	public void AddFunctionNode(FunctionNode calledFrom, String name, Integer functionCount)
+	public void AddFunctionNode(FunctionNode calledFrom, String name)
 	{
-		FunctionNode newFunction = new FunctionNode(calledFrom, name, functionCount);
+		FunctionNode newFunction = new FunctionNode(calledFrom, name);
 		
 		progGraph.add(newFunction);
 	}
