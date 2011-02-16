@@ -11,7 +11,7 @@ public class Main2
     /**
      * Lists the methods of a class using the Reflection api.
      */
-    public void listMethods() 
+    public static void listMethods() 
     {
 
         //Obtain the Class instance
@@ -81,7 +81,8 @@ public class Main2
      */
     public static void main(String[] args) 
     {
-        new Main2().listMethods();
+        //new Main2().listMethods();
+	listMethods();
     }
     
 }
