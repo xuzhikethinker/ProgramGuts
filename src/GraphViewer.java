@@ -44,10 +44,16 @@ public class GraphViewer extends Canvas {
      */
     public void paint(Graphics g)
     {
+    	 for(Node n: graph)
+    	 {
+    		 n.drawConnection(g);
+    	 }
          for(Node n: graph)
-         {
+         {	     	 
         	 n.drawNode(g);
          }
+         
+         
     }
 
 }
