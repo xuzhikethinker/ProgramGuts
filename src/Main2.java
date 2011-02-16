@@ -1,8 +1,9 @@
 import java.lang.reflect.Method;
-
+import java.lang.reflect.Constructor;
 /**
  *
  * @author javadb.com
+	edited and adapted by tforzaglia and nlizzo
  */
 public class Main2 
 {
@@ -24,8 +25,16 @@ public class Main2
 	Method[] methods2 = listClass.getDeclaredMethods();
 	Method[] methods3 = bstClass.getDeclaredMethods();
         Method[] methods4 = leafClass.getDeclaredMethods(); 
- 
-        //Loop through the methods and print out their names
+	
+	//Get the constructors
+	Constructor[] cons1 = interestingClass.getDeclaredConstructors();
+	Constructor[] cons2 = listClass.getDeclaredConstructors();
+	Constructor[] cons3 = bstClass.getDeclaredConstructors();
+	Constructor[] cons4 = leafClass.getDeclaredConstructors();
+        
+	//Loop through the methods and print out their names
+	System.out.println("Methods");
+	System.out.println();
         for (Method method : methods1) 
 	{
             System.out.println(method.getName());
@@ -43,6 +52,26 @@ public class Main2
             System.out.println(method.getName());
         }
 
+	 //Loop through the constructors and print out their names
+	System.out.println();
+	System.out.println("Constructors");
+        System.out.println();
+	for (Constructor constructor : cons1)
+        {
+            System.out.println(constructor.getName());
+        }
+	for (Constructor constructor : cons2)
+        {
+            System.out.println(constructor.getName());
+        }
+	for (Constructor constructor : cons3)
+        {
+            System.out.println(constructor.getName());
+        }
+	for (Constructor constructor : cons4)
+        {
+            System.out.println(constructor.getName());
+        }
 
     }
     
