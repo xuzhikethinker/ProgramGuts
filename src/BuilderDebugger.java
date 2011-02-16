@@ -37,11 +37,14 @@ public class BuilderDebugger {
 	Vector<Node> progGraph;
 	int VectorCount = 0;
 	
+	int nodeCounter;
+	
 	public BuilderDebugger() {
 		progGraph = new Vector<Node>();
 		
 		// starts node list with main FunctionNode
 		progGraph.add( new FunctionNode() );
+		nodeCounter = 0;
 	}
 	
 	/**
@@ -105,7 +108,8 @@ public class BuilderDebugger {
 	 */
 	public void AddFunctionNode(FunctionNode calledFrom, String name)
 	{
-		FunctionNode newFunction = new FunctionNode(calledFrom, name);
+		FunctionNode newFunction = new FunctionNode(calledFrom, name, nodeCounter);
+		nodeCounter++;
 		
 		progGraph.add(newFunction);
 	}
