@@ -3,7 +3,10 @@ import java.awt.Graphics;
 
 enum NODE_TYPE { FUNCTION, OBJECT };
 
-public abstract class Node {
+/**
+ * general node class
+ */
+public class Node {
 
 	public Node(){}
 	
