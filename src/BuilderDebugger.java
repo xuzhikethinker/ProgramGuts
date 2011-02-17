@@ -3,8 +3,6 @@
  * and open the template in the editor.
  */
 
-package programguts;
-
 
 import java.util.Vector;
 
@@ -240,7 +238,7 @@ public class BuilderDebugger {
 	 */
 	public void AddFunctionNode(FunctionNode calledFrom, String name)
 	{
-		FunctionNode newFunction = new FunctionNode(calledFrom, name);
+		FunctionNode newFunction = new FunctionNode(calledFrom, name, calledFrom.position+1);
 
 		progGraph.add(newFunction);
 	}
