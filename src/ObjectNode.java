@@ -47,8 +47,10 @@ public class ObjectNode extends Node {
 		
 		g.setColor(Color.gray);		
                 g.fillOval(xCord,yCord,150,75); 
-                g.setColor(Color.white);
-		g.drawString(this.name, xCord + 30, yCord + 20);
+           g.setColor(Color.white);
+           if(name!=null)
+        	   g.drawString(this.name, xCord + 30, yCord + 20);
+		
                 g.setColor(originalColor);//revert to original canvas color
         
 

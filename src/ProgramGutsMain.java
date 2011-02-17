@@ -47,9 +47,9 @@ public class ProgramGutsMain {
 		graph.add( new FunctionNode((FunctionNode)graph.lastElement(), "testFunction4", 4) );
 		
 		
-		ObjectNode testObject1 = new ObjectNode();
-		ObjectNode testObject2 = new ObjectNode();
-		ObjectNode testObject3 = new ObjectNode();
+		ObjectNode testObject1 = new ObjectNode("Object 1");
+		ObjectNode testObject2 = new ObjectNode("Object 2");
+		ObjectNode testObject3 = new ObjectNode("Object 3");
 		
 		graph.add(testObject1);
 		graph.add(testObject2);
