@@ -21,7 +21,7 @@ public class ProgramGutsMain {
 		bd = new BuilderDebugger();
 		
 		//builder/debugger part
-		bd.DebugProgram();
+		//bd.DebugProgram();
 		
 		// graph viewer part
 		//gv = new GraphViewer( bd.getGraph() );
@@ -44,8 +44,9 @@ public class ProgramGutsMain {
 		graph.add(testFunction1);
 		graph.add( new FunctionNode((FunctionNode)graph.lastElement(), "testFunction2", 2) );
 		graph.add( new FunctionNode((FunctionNode)graph.lastElement(), "testFunction3", 3) );
-		graph.add( new FunctionNode((FunctionNode)graph.lastElement(), "testFunction4", 4) );
-		
+		//graph.add( new FunctionNode((FunctionNode)graph.lastElement(), "testFunction4", 4) );
+		FunctionNode testFunction4 = new FunctionNode((FunctionNode)graph.lastElement(), "testFunction4", 4);
+		graph.add(testFunction4);
 		
 		ObjectNode testObject1 = new ObjectNode("Object 1");
 		ObjectNode testObject2 = new ObjectNode("Object 2");
@@ -58,10 +59,7 @@ public class ProgramGutsMain {
 		testObject1.addConnection(testObject2);
 		testObject1.ObjectsConnectedTo.add(testObject3);
 		testObject2.ObjectsConnectedTo.add(testFunction1);
-		
-	
-		
-		
+		testObject3.ObjectsConnectedTo.add(testFunction4);	
 		
 		return graph;
 	}
