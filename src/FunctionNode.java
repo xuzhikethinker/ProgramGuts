@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
-import java.util.Vector;
 
 /*
  * The FunctionNode class represents a node representing a function

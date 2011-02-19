@@ -8,7 +8,7 @@ enum NODE_TYPE { FUNCTION, OBJECT };
 /**
  * general abstract node class
  */
-public abstract class Node {
+public class Node {
 	
 	int xCord, yCord; //position of node on canvas
 	Vector<Node> ObjectsConnectedTo = new Vector<Node>(); //vector of nodes connected to this node
