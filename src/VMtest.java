@@ -92,17 +92,20 @@ public class VMtest
 				ThreadReference tr = threads.get( i );
 				List<StackFrame> frames = new ArrayList<StackFrame>();
 	//			try{
+					// suspend threads to use frames() method
+					tr.suspend();
 					frames = tr.frames();
 	//				System.out.println( frames );
 	//			} catch( IncompatibleThreadStateException e ) {
 	//				e.printStackTrace();
 	//				}
+				// go through stack frames and get objects	
 				for ( int j = 0; j < frames.size(); j++ )
 				{
 					StackFrame s = frames.get( i );
 					ObjectReference obj = s.thisObject();
 					String object = obj.toString();
-					System.out.println( object );
+					System.out.println( "Thread " + i + "Frame  " + j + ": " + object );
 				}			
 			}
 		
