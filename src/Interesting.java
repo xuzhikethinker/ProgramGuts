@@ -16,7 +16,13 @@ public class Interesting {
                 tree = tree.insert(1);
                 tree = tree.insert(3);
 
+		System.out.println("About to pause");
                 System.in.read();
+		
+		tree = tree.insert(12);
+		head = new List(head, 11);
+		System.out.println(tree);
+		System.out.println(head);
         }
 }
 

@@ -1,4 +1,4 @@
-//Most code from http://illegalargumentexception.blogspot.com/2009/03/java-using-jpda-to-write-debugger.html
+//Some connection code from http://illegalargumentexception.blogspot.com/2009/03/java-using-jpda-to-write-debugger.html
 
 import com.sun.jdi.ObjectReference;
 import com.sun.jdi.Bootstrap;
@@ -28,6 +28,7 @@ import java.util.Iterator;
 import com.sun.jdi.Method;
 import com.sun.jdi.StackFrame;
 import com.sun.jdi.IncompatibleThreadStateException;
+
 public class VMtest 
 {
 	public static VirtualMachine connect( int port ) throws IOException 
@@ -74,38 +75,35 @@ public class VMtest
 			//VirtualMachine v = connect(8000);
 			// establish the connection at port 8000
 			VirtualMachine vm = new VMtest().connect( 8000 );
+			vm.suspend();
 		
 			// Get all threads from VM object	
-			List<ThreadReference> threads = new ArrayList<ThreadReference>();
-			threads = vm.allThreads();
+			List<ThreadReference> threads = vm.allThreads();
 			System.out.println( threads );
-
-/*                                ThreadReference tr = threads.get( 1 );
-                                List<StackFrame> frames = new ArrayList<StackFrame>();
-                                frames = tr.frames();
-                                System.out.println( frames );
-*/	
  
 			// get list of stack frames for each thread
-			for( int i = 0; i < threads.size(); i++ )
+			for( ThreadReference tr : threads )
 			{
-				ThreadReference tr = threads.get( i );
 				List<StackFrame> frames = new ArrayList<StackFrame>();
 	//			try{
-					// suspend threads to use frames() method
-					tr.suspend();
 					frames = tr.frames();
 	//				System.out.println( frames );
 	//			} catch( IncompatibleThreadStateException e ) {
 	//				e.printStackTrace();
 	//				}
 				// go through stack frames and get objects	
-				for ( int j = 0; j < frames.size(); j++ )
+				for ( StackFrame s : frames )
 				{
-					StackFrame s = frames.get( i );
 					ObjectReference obj = s.thisObject();
-					String object = obj.toString();
-					System.out.println( "Thread " + i + "Frame  " + j + ": " + object );
+					String object = (obj == null) ? "null" : obj.toString();
+					System.out.println( "Thread " + tr + " -> Frame  " + s + " -> " + object );
+					try {
+						for (LocalVariable lv : s.visibleVariables()) {
+							System.out.println("    local: " + lv.name() + " = " + s.getValue(lv));
+						}
+					} catch (AbsentInformationException e) {
+						e.printStackTrace();
+					}
 				}			
 			}
 		
