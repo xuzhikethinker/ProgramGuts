@@ -95,13 +95,14 @@ public class VMtest
 				for ( StackFrame s : frames )
 				{
 					ObjectReference obj = s.thisObject();
-					String object = (obj == null) ? "null" : obj.toString();
+					String object = ( obj == null ) ? "null" : obj.toString();
 					System.out.println( "Thread " + tr + " -> Frame  " + s + " -> " + object );
 					try {
-						for (LocalVariable lv : s.visibleVariables()) {
+						for( LocalVariable lv : s.visibleVariables() ) 
+						{
 							System.out.println("    local: " + lv.name() + " = " + s.getValue(lv));
 						}
-					} catch (AbsentInformationException e) {
+					} catch( AbsentInformationException e ) {
 						e.printStackTrace();
 					}
 				}			
