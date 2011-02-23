@@ -64,9 +64,18 @@ public class VMtest
   	{		
  		AttachingConnector connector = getConnector();
     		try{
-			//VirtualMachine v = connect(8000);
+			//VirtualMachine v = connect(8000)
+
 			VirtualMachine vm = new VMtest().connect( 8000 );
+
+                        vm.createVirtualMachine (vm.getConnector());
+
 			System.out.println( "Test" );
+			List<ThreadReference> threads = new ArrayList<ThreadElements>();
+			System.out.println(threads);
+			System.out.println(threads.allClasses());
+			System.out.println(threads.allThreads());
+
      		   } catch( IOException e ) {
         		e.printStackTrace();
      		    }
