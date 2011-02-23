@@ -92,16 +92,17 @@ public class VMtest
 	//				e.printStackTrace();
 	//				}
 				// go through stack frames and get objects	
-				for ( StackFrame s : frames )
+				for( StackFrame s : frames )
 				{
 					ObjectReference obj = s.thisObject();
 					String object = ( obj == null ) ? "null" : obj.toString();
 					System.out.println( "Thread " + tr + " -> Frame  " + s + " -> " + object );
-					try {
+					try{
 						for( LocalVariable lv : s.visibleVariables() ) 
 						{
 							System.out.println("    local: " + lv.name() + " = " + s.getValue(lv));
 						}
+					//put lv.name() as object nodes & s as function nodes
 					} catch( AbsentInformationException e ) {
 						e.printStackTrace();
 					}
