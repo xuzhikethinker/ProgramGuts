@@ -227,7 +227,7 @@ public class BuilderDebugger {
 	 */
 	public void AddFunctionNode(FunctionNode calledFrom, String name) {
 		FunctionNode newFunction = new FunctionNode(calledFrom, name,
-				calledFrom.position + 1);
+				calledFrom.stackPosition + 1);
 
 		progGraph.add(newFunction);
 	}
