@@ -62,7 +62,8 @@ public class BuilderDebugger {
 		 * makes call to VMtest main
 		 */
 		String[] args = { "java", "../tools.jar:." };
-		VMtest.main(args);
+		//VMtest.main(args);
+		VMtest.nodeMain(args);
 
 		// makeNodes();
 

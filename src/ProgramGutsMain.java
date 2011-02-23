@@ -18,12 +18,14 @@ import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Transformer;
 
+import com.sun.jdi.IncompatibleThreadStateException;
+
 public class ProgramGutsMain {
 	
 	static BuilderDebugger bd;
 	static int functionCount = 0;
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws IncompatibleThreadStateException {
         Graph<Integer, String> graphJUNG = new DirectedSparseGraph<Integer, String>();
         final Vector<Node> graph = sampleGraph();
 
@@ -36,13 +38,14 @@ public class ProgramGutsMain {
 		
 		//builder/debugger part
 		// now can run VMtest.main to get threads and stack frame info
-		//bd.DebugProgram();
+		bd.DebugProgram();
 		
 		// graph viewer part
 		//gv = new GraphViewer( bd.getGraph() );
 		
 		/* Set up graph for JUNG */
-        graphJUNG = convertToJUNGGraph(graph);
+        //graphJUNG = convertToJUNGGraph(graph);
+		graphJUNG = convertToJUNGGraph(bd.progGraph);
 
         ISOMLayout<Integer, String> layout = new ISOMLayout(graphJUNG);
         layout.setSize(new Dimension(800, 600));
