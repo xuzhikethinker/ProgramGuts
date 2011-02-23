@@ -2,6 +2,8 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
+import com.sun.jdi.IncompatibleThreadStateException;
+
 
 public class ProgramGutsMain {
 	
@@ -9,7 +11,7 @@ public class ProgramGutsMain {
 	static GraphViewer gv;
 	static int functionCount = 0;
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws IncompatibleThreadStateException {
 		/* set up frame */
 		JFrame f = new JFrame("VisiGuts");
 		
@@ -21,6 +23,7 @@ public class ProgramGutsMain {
 		bd = new BuilderDebugger();
 		
 		//builder/debugger part
+		// now can run VMtest.main to get threads and stack frame info
 		//bd.DebugProgram();
 		
 		// graph viewer part
