@@ -68,13 +68,13 @@ public class VMtest
 
 			VirtualMachine vm = new VMtest().connect( 8000 );
 
-                        vm.createVirtualMachine (vm.getConnector());
+// createVM needs reworking   vm.createVirtualMachine (vm.getConnector());
 
 			System.out.println( "Test" );
 			List<ThreadReference> threads = new ArrayList<ThreadElements>();
 			System.out.println(threads);
-			System.out.println(threads.allClasses());
-			System.out.println(threads.allThreads());
+//Should get classes	System.out.println(threads.allClasses());
+//Should get Threads	System.out.println(threads.allThreads());
 
      		   } catch( IOException e ) {
         		e.printStackTrace();
