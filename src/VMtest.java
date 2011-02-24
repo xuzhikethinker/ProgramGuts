@@ -19,143 +19,136 @@ import com.sun.jdi.connect.AttachingConnector;
 import com.sun.jdi.connect.Connector;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 
-public class VMtest 
-{
-	public static VirtualMachine connect( int port ) throws IOException 
-	{
-		String strPort = Integer.toString( port );
-    		AttachingConnector connector = getConnector();
-    		try {
-      			VirtualMachine vm = connect( connector, strPort );
-      			return vm;
-    		    } catch( IllegalConnectorArgumentsException e ) {
-      				throw new IllegalStateException( e );
-    			}
-  	}
+public class VMtest {
+	public static VirtualMachine connect(int port) throws IOException {
+		String strPort = Integer.toString(port);
+		AttachingConnector connector = getConnector();
+		try {
+			VirtualMachine vm = connect(connector, strPort);
+			return vm;
+		} catch (IllegalConnectorArgumentsException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 
-	private static AttachingConnector getConnector() 
-	{
+	private static AttachingConnector getConnector() {
 		VirtualMachineManager vmManager = Bootstrap.virtualMachineManager();
-    		for( Connector connector : vmManager.attachingConnectors() ) 
-		{
-      			System.out.println( connector.name() );
-      			if( "com.sun.jdi.SocketAttach".equals( connector.name() ) ) 
-			{
-        			return( AttachingConnector ) connector;
-      			}
-    		}
-    		throw new IllegalStateException();
-  	}
+		for (Connector connector : vmManager.attachingConnectors()) {
+			System.out.println(connector.name());
+			if ("com.sun.jdi.SocketAttach".equals(connector.name())) {
+				return (AttachingConnector) connector;
+			}
+		}
+		throw new IllegalStateException();
+	}
 
-	private static VirtualMachine connect( AttachingConnector connector, String port ) throws IllegalConnectorArgumentsException, IOException 
-	{
-    		Map<String, Connector.Argument> args = connector.defaultArguments();
-    		Connector.Argument pidArgument = args.get( "port" );
-    		if( pidArgument == null ) 
-		{
-      			throw new IllegalStateException();
-    		}
-    		pidArgument.setValue( port );
-		return connector.attach( args );
-  	}
+	private static VirtualMachine connect(AttachingConnector connector,
+			String port) throws IllegalConnectorArgumentsException, IOException {
+		Map<String, Connector.Argument> args = connector.defaultArguments();
+		Connector.Argument pidArgument = args.get("port");
+		if (pidArgument == null) {
+			throw new IllegalStateException();
+		}
+		pidArgument.setValue(port);
+		return connector.attach(args);
+	}
 
-	public static void main( String [] args ) throws IncompatibleThreadStateException 
-  	{		
-    		try{
-			//VirtualMachine v = connect(8000);
+	public static void main(String[] args)
+			throws IncompatibleThreadStateException {
+		try {
+			// VirtualMachine v = connect(8000);
 			// establish the connection at port 8000
-			VirtualMachine vm = new VMtest().connect( 8000 );
+			VirtualMachine vm = new VMtest().connect(8000);
 			vm.suspend();
-		
-			// Get all threads from VM object	
+
+			// Get all threads from VM object
 			List<ThreadReference> threads = vm.allThreads();
-			System.out.println( threads );
- 
+			System.out.println(threads);
+
 			// get list of stack frames for each thread
-			for( ThreadReference tr : threads )
-			{
+			for (ThreadReference tr : threads) {
 				List<StackFrame> frames = new ArrayList<StackFrame>();
-	//			try{
-					frames = tr.frames();
-	//				System.out.println( frames );
-	//			} catch( IncompatibleThreadStateException e ) {
-	//				e.printStackTrace();
-	//				}
-				// go through stack frames and get objects	
-				for( StackFrame s : frames )
-				{
+				// try{
+				frames = tr.frames();
+				// System.out.println( frames );
+				// } catch( IncompatibleThreadStateException e ) {
+				// e.printStackTrace();
+				// }
+				// go through stack frames and get objects
+				for (StackFrame s : frames) {
 					ObjectReference obj = s.thisObject();
-					String object = ( obj == null ) ? "null" : obj.toString();
-					System.out.println( "Thread " + tr + " -> Frame  " + s + " -> " + object );
-					try{
-						for( LocalVariable lv : s.visibleVariables() ) 
-						{
-							System.out.println("    local: " + lv.name() + " = " + s.getValue(lv));
+					String object = (obj == null) ? "null" : obj.toString();
+					System.out.println("Thread " + tr + " -> Frame  " + s
+							+ " -> " + object);
+					try {
+						for (LocalVariable lv : s.visibleVariables()) {
+							System.out.println("    local: " + lv.name()
+									+ " = " + s.getValue(lv));
 						}
-					//put lv.name() as object nodes & s as function nodes
-					} catch( AbsentInformationException e ) {
+						// put lv.name() as object nodes & s as function nodes
+					} catch (AbsentInformationException e) {
 						e.printStackTrace();
 					}
-				}			
-			}
-		
-     		   } catch( IOException e ) {
-        		e.printStackTrace();
-     		    }
-	}
-	
-	public static Vector<Node> nodeMain(String args[]) throws IncompatibleThreadStateException {
-		Vector<Node> tempGraph = new Vector<Node>();
-		try{
-			
-		//VirtualMachine v = connect(8000);
-		// establish the connection at port 8000
-		VirtualMachine vm = new VMtest().connect( 8000 );
-		vm.suspend();
-	
-		// Get all threads from VM object	
-		List<ThreadReference> threads = vm.allThreads();
-		System.out.println( threads );
-
-		// get list of stack frames for each thread
-		for( ThreadReference tr : threads )
-		{
-			List<StackFrame> frames = new ArrayList<StackFrame>();
-//			try{
-				frames = tr.frames();
-//				System.out.println( frames );
-//			} catch( IncompatibleThreadStateException e ) {
-//				e.printStackTrace();
-//				}
-			// go through stack frames and get objects	
-			for( StackFrame s : frames )
-			{
-				ObjectReference obj = s.thisObject();
-				String object = ( obj == null ) ? "null" : obj.toString();
-				System.out.println( "Thread " + tr + " -> Frame  " + s + " -> " + object );
-				FunctionNode objfunc = new FunctionNode();
-				objfunc.name = s.toString();
-				tempGraph.add(objfunc);
-				try{
-					for( LocalVariable lv : s.visibleVariables() ) 
-					{
-						System.out.println("    local: " + lv.name() + " = " + s.getValue(lv));
-						ObjectNode objlv = new ObjectNode();
-						objlv.name = lv.name();
-						tempGraph.add(objlv);
-						
-					}
-				//put lv.name() as object nodes & s as function nodes
-				} catch( AbsentInformationException e ) {
-					e.printStackTrace();
 				}
-			}	
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-	
- 		   } catch( IOException e ) {
-    		e.printStackTrace();
- 		    }
+	}
+
+	public static Vector<Node> nodeMain(String args[])
+			throws IncompatibleThreadStateException {
+		Vector<Node> tempGraph = new Vector<Node>();
+		try {
+
+			// VirtualMachine v = connect(8000);
+			// establish the connection at port 8000
+			VirtualMachine vm = new VMtest().connect(8000);
+			vm.suspend();
+
+			// Get all threads from VM object
+			List<ThreadReference> threads = vm.allThreads();
+			System.out.println(threads);
+
+			// get list of stack frames for each thread
+			for (ThreadReference tr : threads) {
+				List<StackFrame> frames = new ArrayList<StackFrame>();
+				// try{
+				frames = tr.frames();
+				// System.out.println( frames );
+				// } catch( IncompatibleThreadStateException e ) {
+				// e.printStackTrace();
+				// }
+				// go through stack frames and get objects
+				for (StackFrame s : frames) {
+					ObjectReference obj = s.thisObject();
+					String object = (obj == null) ? "null" : obj.toString();
+					System.out.println("Thread " + tr + " -> Frame  " + s
+							+ " -> " + object);
+					FunctionNode objfunc = new FunctionNode();
+					objfunc.name = s.toString();
+					tempGraph.add(objfunc);
+					try {
+						for (LocalVariable lv : s.visibleVariables()) {
+							System.out.println("    local: " + lv.name()
+									+ " = " + s.getValue(lv));
+							ObjectNode objlv = new ObjectNode();
+							objlv.name = lv.name();
+							tempGraph.add(objlv);
+
+						}
+						// put lv.name() as object nodes & s as function nodes
+					} catch (AbsentInformationException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return tempGraph;
-		
+
 	}
 }// end class

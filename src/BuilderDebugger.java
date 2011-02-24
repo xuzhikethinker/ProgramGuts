@@ -1,6 +1,4 @@
-
-import java.util.Vector;
-/*
+import java.util.Vector; /*
  import com.sun.jdi.Bootstrap;
  import com.sun.jdi.ReferenceType;
  import com.sun.jdi.VirtualMachine;
@@ -19,10 +17,10 @@ import java.util.Vector;
  import java.util.List;
  import java.util.Map;
 
-import java.lang.reflect.Constructor;
+ import java.lang.reflect.Constructor;
 
-import java.lang.reflect.Method;
-*/
+ import java.lang.reflect.Method;
+ */
 import com.sun.jdi.IncompatibleThreadStateException;
 
 /**
@@ -62,8 +60,8 @@ public class BuilderDebugger {
 		 * makes call to VMtest main
 		 */
 		String[] args = { "java", "../tools.jar:." };
-		//VMtest.main(args);
-		VMtest.nodeMain(args);
+		// VMtest.main(args);
+		progGraph = VMtest.nodeMain(args);
 
 		// makeNodes();
 
@@ -154,6 +152,7 @@ public class BuilderDebugger {
 		 * method : methods2) {
 		 * 
 		 * 
+		 * 
 		 * AddFunctionNode((FunctionNode)progGraph.lastElement(),method.getName()
 		 * );
 		 * 
@@ -169,6 +168,7 @@ public class BuilderDebugger {
 		 * for (Method method : methods3) {
 		 * 
 		 * 
+		 * 
 		 * AddFunctionNode((FunctionNode)progGraph.lastElement(),method.getName()
 		 * );
 		 * 
@@ -182,6 +182,7 @@ public class BuilderDebugger {
 		 * 
 		 * 
 		 * for (Method method : methods4) {
+		 * 
 		 * 
 		 * 
 		 * AddFunctionNode((FunctionNode)progGraph.lastElement(),method.getName()
