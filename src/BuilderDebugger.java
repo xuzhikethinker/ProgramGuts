@@ -94,9 +94,9 @@ public class BuilderDebugger {
 	 * @param from
 	 * @param to
 	 */
-	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to) {
-		to.ObjectsConnectedTo.add(from);
-		from.ObjectsConnectedTo.add(to);
+	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to, String edgeName) {
+		//to.ObjectsConnectedTo.add(from);
+		from.ObjectsConnectedTo.put(edgeName, to);
 	}
 
 	/**
@@ -116,8 +116,8 @@ public class BuilderDebugger {
 	 * @param to
 	 */
 	public void AddFunctionToObjectNodeConnection(FunctionNode from,
-			ObjectNode to) {
-		from.ObjectsConnectedTo.add(to);
+			ObjectNode to, String edgeName) {
+		from.ObjectsConnectedTo.put(edgeName, to);
 	}
 	
 	public static int findPrevFuncNode( Vector<Node> g ) {
