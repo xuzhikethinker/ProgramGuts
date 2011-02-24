@@ -115,8 +115,5 @@ public class VMtest {
 		}
 		
 		return tempGraph;
-	}
-	
-	
-	
+	}	
 }// end class
