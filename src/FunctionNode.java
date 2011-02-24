@@ -20,7 +20,7 @@ public class FunctionNode extends Node {
 public FunctionNode(FunctionNode calledFrom, String name, int position) {
 	super.name = name;
             super.nodeType = "function";
-            super.addConnection(calledFrom);
+            super.addConnection(calledFrom.name, calledFrom);
             super.stackPosition = position;
 }
 
@@ -33,8 +33,5 @@ public FunctionNode(FunctionNode calledFrom, String name, int position) {
             super.nodeType = "function";
             this.stackPosition = 0;
 
-}
-	
-	
-
+    }
 }
