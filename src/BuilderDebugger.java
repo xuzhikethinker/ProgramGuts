@@ -1,26 +1,4 @@
-import java.util.Vector; /*
- import com.sun.jdi.Bootstrap;
- import com.sun.jdi.ReferenceType;
- import com.sun.jdi.VirtualMachine;
- import com.sun.jdi.VirtualMachineManager;
- import com.sun.jdi.connect.AttachingConnector;
- import com.sun.jdi.connect.Connector;
- import com.sun.jdi.connect.Transport;
-
- import com.sun.jdi.*;
- import com.sun.jdi.connect.*;
- import com.sun.jdi.connect.IllegalConnectorArgumentsException;
-
- import java.io.DataInputStream;
- import java.io.IOException;
- import java.util.HashMap;
- import java.util.List;
- import java.util.Map;
-
- import java.lang.reflect.Constructor;
-
- import java.lang.reflect.Method;
- */
+import java.util.Vector; 
 import com.sun.jdi.IncompatibleThreadStateException;
 
 /**
