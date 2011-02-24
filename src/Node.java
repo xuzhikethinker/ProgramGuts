@@ -16,6 +16,7 @@ public class Node {
     int stackPosition;
     
     Hashtable<String, Node> ObjectsConnectedTo = new Hashtable<String, Node>(); // string is edgename
+    Vector<Node> noNameRefs = new Vector<Node>();
 
     /**
      * generic constructor for abstract node class
