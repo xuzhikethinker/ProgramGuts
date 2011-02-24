@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 
 import com.sun.jdi.AbsentInformationException;
@@ -53,52 +54,9 @@ public class VMtest {
 		return connector.attach(args);
 	}
 
-	public static void main(String[] args)
+	public static Vector<Node>  main(String[] args)
 			throws IncompatibleThreadStateException {
-		try {
-			// VirtualMachine v = connect(8000);
-			// establish the connection at port 8000
-			VirtualMachine vm = new VMtest().connect(8000);
-			vm.suspend();
-
-			// Get all threads from VM object
-			List<ThreadReference> threads = vm.allThreads();
-			System.out.println(threads);
-
-			// get list of stack frames for each thread
-			for (ThreadReference tr : threads) {
-				List<StackFrame> frames = new ArrayList<StackFrame>();
-				// try{
-				frames = tr.frames();
-				// System.out.println( frames );
-				// } catch( IncompatibleThreadStateException e ) {
-				// e.printStackTrace();
-				// }
-				// go through stack frames and get objects
-				for (StackFrame s : frames) {
-					ObjectReference obj = s.thisObject();
-					String object = (obj == null) ? "null" : obj.toString();
-					System.out.println("Thread " + tr + " -> Frame  " + s
-							+ " -> " + object);
-					try {
-						for (LocalVariable lv : s.visibleVariables()) {
-							System.out.println("    local: " + lv.name()
-									+ " = " + s.getValue(lv));
-						}
-						// put lv.name() as object nodes & s as function nodes
-					} catch (AbsentInformationException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static Vector<Node> nodeMain(String args[])
-			throws IncompatibleThreadStateException {
+		
 		Vector<Node> tempGraph = new Vector<Node>();
 		try {
 
@@ -126,17 +84,24 @@ public class VMtest {
 					String object = (obj == null) ? "null" : obj.toString();
 					System.out.println("Thread " + tr + " -> Frame  " + s
 							+ " -> " + object);
-					FunctionNode objfunc = new FunctionNode();
-					objfunc.name = s.toString();
+					FunctionNode objfunc;
+					int calledFrom = BuilderDebugger.findPrevFuncNode(tempGraph);
+					if ( calledFrom == -1 ) { objfunc = new FunctionNode(); }
+					else {objfunc = new FunctionNode((FunctionNode)tempGraph.get(calledFrom), s.toString(), tempGraph.get(calledFrom).stackPosition+1); }
 					tempGraph.add(objfunc);
+					
+					
 					try {
-						for (LocalVariable lv : s.visibleVariables()) {
-							System.out.println("    local: " + lv.name()
-									+ " = " + s.getValue(lv));
-							ObjectNode objlv = new ObjectNode();
-							objlv.name = lv.name();
-							tempGraph.add(objlv);
-
+						if ( object != "null" ) {
+							for (LocalVariable lv : s.visibleVariables()) {
+								System.out.println("    local: " + lv.name()
+										+ " = " + s.getValue(lv));
+								ObjectNode objlv = new ObjectNode();
+								objlv.name = lv.name();
+								tempGraph.add(objlv);
+								objfunc.ObjectsConnectedTo.add(objlv);
+	
+							}
 						}
 						// put lv.name() as object nodes & s as function nodes
 					} catch (AbsentInformationException e) {
@@ -148,7 +113,10 @@ public class VMtest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		return tempGraph;
-
 	}
+	
+	
+	
 }// end class

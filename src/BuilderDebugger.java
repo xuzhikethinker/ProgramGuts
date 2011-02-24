@@ -60,8 +60,8 @@ public class BuilderDebugger {
 		 * makes call to VMtest main
 		 */
 		String[] args = { "java", "../tools.jar:." };
-		// VMtest.main(args);
-		progGraph = VMtest.nodeMain(args);
+		progGraph = VMtest.main(args);
+		//progGraph = VMtest.nodeMain(args);
 
 		// makeNodes();
 
@@ -243,5 +243,16 @@ public class BuilderDebugger {
 	public void AddFunctionToObjectNodeConnection(FunctionNode from,
 			ObjectNode to) {
 		from.ObjectsConnectedTo.add(to);
+	}
+	
+	public static int findPrevFuncNode( Vector<Node> g ) {
+		for ( int i = g.size()-1; i >= 0; i-- )
+		{
+			if ( g.get(i).nodeType == "function" )
+			{
+				return i;
+			}
+		}
+		return -1;
 	}
 }

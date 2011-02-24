@@ -28,7 +28,7 @@ public class ProgramGutsMain {
 	public static void main(String args[])
 			throws IncompatibleThreadStateException {
 		Graph<Integer, String> graphJUNG = new DirectedSparseGraph<Integer, String>();
-		final Vector<Node> graph = sampleGraph();
+		//final Vector<Node> graph = sampleGraph();
 
 		/* Set up frame */
 		JFrame f = new JFrame("VisiGuts");
@@ -40,13 +40,15 @@ public class ProgramGutsMain {
 		// builder/debugger part
 		// now can run VMtest.main to get threads and stack frame info
 		bd.DebugProgram();
+		
+		final Vector<Node> graph = bd.progGraph;
 
 		// graph viewer part
 		// gv = new GraphViewer( bd.getGraph() );
 
 		/* Set up graph for JUNG */
 		// graphJUNG = convertToJUNGGraph(graph);
-		graphJUNG = convertToJUNGGraph(bd.progGraph);
+		graphJUNG = convertToJUNGGraph(graph);
 
 		ISOMLayout<Integer, String> layout = new ISOMLayout(graphJUNG);
 		layout.setSize(new Dimension(800, 600));
