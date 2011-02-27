@@ -1,29 +1,39 @@
 import java.util.Hashtable;
+import java.util.Vector;
 
 
 enum NODE_TYPE { FUNCTION, OBJECT };
 
 /**
- * general abstract node class
+ * general node class
  */
 public class Node {
 	
     int xCord, yCord; //stackPosition of node on canvas
     int vertexID;
-    //Vector<Node> ObjectsConnectedTo = new Vector<Node>(); //vector of nodes connected to this node
+    
     String nodeType;
     String name;
     int stackPosition;
     
+    /**
+     * Hashtable contains all the neighbors of this node
+     */
     Hashtable<String, Node> ObjectsConnectedTo = new Hashtable<String, Node>(); // string is edgename
     Vector<Node> noNameRefs = new Vector<Node>();
 
     /**
-     * generic constructor for abstract node class
+     * generic constructor for node class
      */
     public Node() {
     }
 
+    /**
+     * Adds a connection between this node and "connectedTo" by 
+     * adding an entry into the hashtable
+     * @param edgeName
+     * @param connectedTo
+     */
     public void addConnection(String edgeName, Node connectedTo) {
         ObjectsConnectedTo.put(edgeName, connectedTo);
     }

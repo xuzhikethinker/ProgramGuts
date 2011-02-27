@@ -1,8 +1,5 @@
 /**
  * The ObjectNode class represents a node representing an object
- * 
- * Each ObjectNode has a list(vector) of the ObjectNodes it is connected to.
- * 
  */
 
 public class ObjectNode extends Node {
@@ -28,5 +25,4 @@ public class ObjectNode extends Node {
 		super.stackPosition = -1;
 		super.nodeType = "object";
 	}
-
 }

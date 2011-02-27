@@ -1,13 +1,3 @@
-import java.util.Random;
-import java.util.Vector;
-import javax.swing.JFrame;
-import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
-import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
@@ -15,10 +5,23 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.util.Random;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.swing.JFrame;
 
 import org.apache.commons.collections15.Transformer;
 
 import com.sun.jdi.IncompatibleThreadStateException;
+
+import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
+import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 
 public class ProgramGutsMain {
 
@@ -150,13 +153,15 @@ public class ProgramGutsMain {
 
 		Random r = new Random();
 		for (int i = 0; i < 20; i++) {
-			objectNodeCollection.get(i).addConnection(
-					objectNodeCollection.get(r.nextInt(20)));
-			objectNodeCollection.get(i).addConnection(
-					objectNodeCollection.get(r.nextInt(20)));
+			int rand = r.nextInt(20);
+			objectNodeCollection.get(i).addConnection(objectNodeCollection.get(rand).name,
+					objectNodeCollection.get(rand));
+			rand = r.nextInt(20);
+			objectNodeCollection.get(i).addConnection(objectNodeCollection.get(rand).name,
+					objectNodeCollection.get(rand));
 
 		}
-		testFunction1.addConnection(objectNodeCollection.get(0));
+		testFunction1.addConnection(objectNodeCollection.get(0).name, objectNodeCollection.get(0));
 
 		return graph;
 
@@ -187,7 +192,9 @@ public class ProgramGutsMain {
 
 		/* add all connections from the graph to graphJUNG as edges */
 		for (Node n : graph) {
-			for (Node o : n.ObjectsConnectedTo) {
+			Set<String> connectionNames = n.ObjectsConnectedTo.keySet();
+			for ( String s : connectionNames ) {
+				Node o = n.ObjectsConnectedTo.get(s);
 				String edgeName = "edge" + edgeCount;
 				graphJUNG.addEdge(edgeName, n.vertexID, o.vertexID);
 				edgeCount++;

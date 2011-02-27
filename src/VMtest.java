@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Vector;
 
 import com.sun.jdi.AbsentInformationException;
@@ -99,8 +98,7 @@ public class VMtest {
 								ObjectNode objlv = new ObjectNode();
 								objlv.name = lv.name();
 								tempGraph.add(objlv);
-								objfunc.ObjectsConnectedTo.add(objlv);
-	
+								objfunc.ObjectsConnectedTo.put(objlv.name, objlv);
 							}
 						}
 						// put lv.name() as object nodes & s as function nodes
