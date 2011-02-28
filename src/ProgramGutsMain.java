@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -29,7 +30,7 @@ public class ProgramGutsMain {
 	static int functionCount = 0;
 
 	public static void main(String args[])
-			throws IncompatibleThreadStateException {
+			throws IncompatibleThreadStateException, IOException {
 		Graph<Integer, String> graphJUNG = new DirectedSparseGraph<Integer, String>();
 		//final Vector<Node> graph = sampleGraph();
 
@@ -44,7 +45,7 @@ public class ProgramGutsMain {
 		// now can run VMtest.main to get threads and stack frame info
 		bd.DebugProgram();
 		
-		final Vector<Node> graph = bd.progGraph;
+		final Vector<Node> graph = bd.getGraph();
 
 		// graph viewer part
 		// gv = new GraphViewer( bd.getGraph() );

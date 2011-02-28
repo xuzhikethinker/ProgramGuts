@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Vector; 
 import com.sun.jdi.IncompatibleThreadStateException;
 
@@ -31,21 +32,31 @@ public class BuilderDebugger {
 	 * entrance point into debugger part from main class
 	 * 
 	 * @throws IncompatibleThreadStateException
+	 * @throws IOException 
 	 */
-	public void DebugProgram() throws IncompatibleThreadStateException {
+	public void DebugProgram() throws IncompatibleThreadStateException, IOException {
 
 		/*
 		 * makes call to VMtest main
 		 */
+		
+		/*
+		 * Attempting to run outside process by call from here
+		 
+		String testProgSrcName = "Interesting.java";
+		String testProg = testProgSrcName.substring(0, testProgSrcName.length()-5);
+		String testCMD = "java -Xdebug -Xrunjdwp:transport=dt_socket," +
+				"address=8000,server=y,suspend=n " + testProg;
+		String compile = "javac " + testProgSrcName; 
+		
+		Runtime rt = Runtime.getRuntime();
+        rt.exec(compile);
+        rt.exec(testCMD);
+
+		*/
+		
 		String[] args = { "java", "../tools.jar:." };
 		progGraph = VMtest.main(args);
-		//progGraph = VMtest.nodeMain(args);
-
-		// makeNodes();
-
-		// AddObjectNode(getClassName()); -> use only if we can get a stack
-		// trace for Interesting.Java
-
 	}
 
 	/**
