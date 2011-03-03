@@ -20,8 +20,9 @@ public class ObjectNode extends Node {
 	 * @param name
 	 */
 
-	public ObjectNode(String name) {
+	public ObjectNode(String name, String value) {
 		super.name = name;
+		super.value = value;
 		super.stackPosition = -1;
 		super.nodeType = "object";
 	}
