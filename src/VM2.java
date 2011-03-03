@@ -99,7 +99,7 @@ public class VM2
 						//graph.add( lv );
 						//explored = new boolean[l.size()];
 				                //inpath = new boolean[l.size()];
-						
+					 		
 						System.out.println(" local: " + lv.name() + " = " + s.getValue(lv));
 									
 						//ObjectNode on = new ObjectNode( lv.name() );
@@ -125,21 +125,6 @@ public class VM2
          		e.printStackTrace();
       		  }
 	}
-/*
-	public static void search( Value v,  int depth )
-	{
-		ObjectReference o = (ObjectReference) v;
-		List<Field> fields = o.referenceType().fields();
-		for( Field f: fields )
-		{
-			Value fval = o.getValue( f );
-			System.out.println( " field value " + fval + "field name " + f.name() + "type " + f.typeName() );
-			
-		//	ObjectNode on = new ObjectNode( f.typeName() );
-			search( fval,  depth + 1 );
-		}
-	}
-*/
 
 //	public static boolean explored[];
 //       public static boolean inpath[];

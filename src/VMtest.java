@@ -44,39 +44,6 @@ public class VMtest {
 		throw new IllegalStateException();
 	}
 
-<<<<<<< HEAD
-	public static void main( String [] args ) 
-  	{		
- 		AttachingConnector connector = getConnector();
-    		try{
-			//VirtualMachine v = connect(8000)
-
-			VirtualMachine vm = new VMtest().connect( 8000 );
-
-
-			List<ThreadReference> threads = new ArrayList<ThreadElements>();
-			System.out.println(threads);
-//Should get classes	System.out.println(threads.allClasses());
-//Should get Threads	System.out.println(threads.allThreads());
-     		   } catch( IOException e ) {
-        		e.printStackTrace();
-     		    }
-=======
-	/*
-	 * public static void main( String [] args ) { AttachingConnector connector
-	 * = getConnector(); try{ //VirtualMachine v = connect(8000)
-	 * 
-	 * VirtualMachine vm = new VMtest().connect( 8000 );
-	 * 
-	 * // createVM needs reworking vm.createVirtualMachine (vm.getConnector());
-	 * 
-	 * System.out.println( "Test" ); List<ThreadReference> threads = new
-	 * ArrayList<ThreadElements>(); System.out.println(threads); //Should get
-	 * classes System.out.println(threads.allClasses()); //Should get Threads
-	 * System.out.println(threads.allThreads()); // New goal: need hash table }
-	 * catch( IOException e ) { e.printStackTrace(); }
-	 */
->>>>>>> ba76c884f279339ee374e09c10ae4ff3bdca335d
 	private static VirtualMachine connect(AttachingConnector connector,
 			String port) throws IllegalConnectorArgumentsException, IOException {
 		Map<String, Connector.Argument> args = connector.defaultArguments();
@@ -128,8 +95,7 @@ public class VMtest {
 					tempGraph.add(objfunc);
 
 					try {
-<<<<<<< HEAD
-//for each visible variable getvalue
+							//for each visible variable getvalue
 							for (LocalVariable lv : s.visibleVariables()) {
 								System.out.println("    local: " + lv.name()
 										+ " = " + s.getValue(lv));
@@ -137,7 +103,6 @@ public class VMtest {
 								objlv.name = lv.name();
 								tempGraph.add(objlv);
 								objfunc.ObjectsConnectedTo.put(objlv.name, objlv);
-=======
 						// if (object != "null") {
 						for (LocalVariable lv : s.visibleVariables()) {
 							System.out.println(" local: " + lv.name() + " = "
@@ -147,8 +112,6 @@ public class VMtest {
 							  tempGraph.add(objlv);
 							  objfunc.ObjectsConnectedTo.add(objlv);
 							 
->>>>>>> ba76c884f279339ee374e09c10ae4ff3bdca335d
-
 							if (object != "null") {
 								/* new additions for fields and values */
 								List<Field> fields = obj.referenceType()
@@ -174,14 +137,8 @@ public class VMtest {
 									}
 								}
 							}
-<<<<<<< HEAD
-						// put lv.name() as object nodes & s as function nodes
-=======
 						}
 
-						// put lv.name() as object nodes & s as function
-						// nodes
->>>>>>> ba76c884f279339ee374e09c10ae4ff3bdca335d
 					} catch (AbsentInformationException e) {
 						e.printStackTrace();
 					}
