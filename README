@@ -1,1 +1,9 @@
-Readme
+//to compile and run the test program on separate terminal
+javac -g Interesting.java
+java -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n Interesting
+
+//to compile and run the VMtest program or main--just replace the filename at the end
+javac -cp /usr/lib/jvm/java-6-sun-1.6.0.22/lib/tools.jar VMtest.java
+java -cp /usr/lib/jvm/java-6-sun-1.6.0.22/lib/tools.jar:. VMtest
+
+can use the path to tools.jar as "../tools.jar:." b/c the file is now in our local repository
