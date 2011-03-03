@@ -42,6 +42,27 @@ public class VMtest {
 		throw new IllegalStateException();
 	}
 
+<<<<<<< HEAD
+	public static void main( String [] args ) 
+  	{		
+ 		AttachingConnector connector = getConnector();
+    		try{
+			//VirtualMachine v = connect(8000)
+
+			VirtualMachine vm = new VMtest().connect( 8000 );
+
+// createVM needs reworking   vm.createVirtualMachine (vm.getConnector());
+
+			System.out.println( "Test" );
+			List<ThreadReference> threads = new ArrayList<ThreadElements>();
+			System.out.println(threads);
+//Should get classes	System.out.println(threads.allClasses());
+//Should get Threads	System.out.println(threads.allThreads());
+// New goal: need hash table
+     		   } catch( IOException e ) {
+        		e.printStackTrace();
+     		    }
+=======
 	private static VirtualMachine connect(AttachingConnector connector,
 			String port) throws IllegalConnectorArgumentsException, IOException {
 		Map<String, Connector.Argument> args = connector.defaultArguments();
@@ -51,6 +72,7 @@ public class VMtest {
 		}
 		pidArgument.setValue(port);
 		return connector.attach(args);
+>>>>>>> 6717673435c58921c38197ec116dc7f300ad7d12
 	}
 
 	public static Vector<Node>  main(String[] args)
