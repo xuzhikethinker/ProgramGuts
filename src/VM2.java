@@ -122,7 +122,7 @@ public class VM2
 	//need a recursive search method to look through all values of the local variables
 	public static void search( Value v , int depth )
 	{
-		if (value instanceof ObjectReference) {
+		if (v instanceof ObjectReference) {
             		ObjectReference obj = (ObjectReference) v;
             		List<Field> fields = obj.referenceType().fields();
             
@@ -135,10 +135,10 @@ public class VM2
 				}
 				else {
 					//.....
-				
-					
-
-
+				}	
+			}	
+		}
+	}
 
 
 
