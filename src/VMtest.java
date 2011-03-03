@@ -71,12 +71,8 @@ public class VMtest {
 			// get list of stack frames for each thread
 			for (ThreadReference tr : threads) {
 				List<StackFrame> frames = new ArrayList<StackFrame>();
-				// try{
 				frames = tr.frames();
-				// System.out.println( frames );
-				// } catch( IncompatibleThreadStateException e ) {
-				// e.printStackTrace();
-				// }
+				
 				// go through stack frames and get objects
 				for (StackFrame s : frames) {
 					ObjectReference obj = s.thisObject();
@@ -99,6 +95,14 @@ public class VMtest {
 								objlv.name = lv.name();
 								tempGraph.add(objlv);
 								objfunc.ObjectsConnectedTo.put(objlv.name, objlv);
+
+								/* new additions for fields and values */
+								List<Field> fields = obj.referenceType().fields();
+                                                		for( Field f: fields ) {
+                                                        		Value fval = obj.getValue( f );
+                                                        		System.out.println( "***** field name " + f.name() + " ****field value " + fval + " *****type " + f.typeName() );
+                                               	 		}
+
 							}
 						}
 						// put lv.name() as object nodes & s as function nodes

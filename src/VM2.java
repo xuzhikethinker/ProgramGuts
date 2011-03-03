@@ -70,7 +70,7 @@ public class VM2
 	public static void main( String [] args ) throws IncompatibleThreadStateException
    	{		
 		//Hashtable<LocalVariable> graph = new Hashtable<LocalVariable>();
-		Vector<LocalVariable> graph= new Vector<LocalVariable>();
+		//Vector<LocalVariable> graph= new Vector<LocalVariable>();
     	 try{
 		// establish the connection at port 8000
 		VirtualMachine vm = new VM2().connect( 8000 );
@@ -103,7 +103,14 @@ public class VM2
 						System.out.println(" local: " + lv.name() + " = " + s.getValue(lv));
 						
 						//ObjectNode on = new ObjectNode( lv.name() );
-					
+						//Value v = s.getValue(lv);	
+						//ObjectReference o = (ObjectReference) v;
+                				List<Field> fields = obj.referenceType().fields();
+                				for( Field f: fields )
+                				{
+                        				Value fval = obj.getValue( f );
+                        				System.out.println( "***** field name " + f.name() + " ****field value " + fval + " *****type " + f.typeName() );
+						}
 //						search(  s.getValue(lv),  1 );//instead of 'on', use objfunc in VMtest.java
 					}
 					//put lv.name() as edges, s.getValue(lv) as object nodes & s as function nodes
