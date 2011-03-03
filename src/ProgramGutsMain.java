@@ -11,6 +11,9 @@ import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import org.apache.commons.collections15.Transformer;
 
@@ -34,8 +37,17 @@ public class ProgramGutsMain {
 		Graph<Integer, String> graphJUNG = new DirectedSparseGraph<Integer, String>();
 		//final Vector<Node> graph = sampleGraph();
 
-		/* Set up frame */
+		/* Set up frame and menu*/
 		JFrame f = new JFrame("VisiGuts");
+                JMenuBar mb = new JMenuBar();
+		JMenu menu = new JMenu("File");
+		JMenuItem save = new JMenuItem("Save");
+		JMenuItem close = new JMenuItem("Close");
+		close.addActionListener(new CloseWindow());
+		mb.add(menu);
+		menu.add(save);
+		menu.add(close);
+		f.setJMenuBar(mb);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -60,6 +72,9 @@ public class ProgramGutsMain {
 		VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(
 				layout);
 		vv.setPreferredSize(new Dimension(1200, 800));
+                
+                /* Menu item listener for saving the Visualization Viewer as a jpg */
+                save.addActionListener(new SaveGraph(vv, f));
 
 		/*
 		 * Set transformers in the visualization viewer for proper JUNG
