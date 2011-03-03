@@ -17,10 +17,11 @@ public class FunctionNode extends Node {
      * @param name
      * @param position
      */
-	public FunctionNode(FunctionNode calledFrom, String name, int position) {
+	public FunctionNode(FunctionNode calledFrom, String name, String value, int position) {
 			super.name = name;
+			super.value = value;
             super.nodeType = "function";
-            super.addConnection(calledFrom.name, calledFrom);
+            super.addConnection(calledFrom);
             super.stackPosition = position;
 	}
 
