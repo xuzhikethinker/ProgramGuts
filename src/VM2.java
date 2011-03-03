@@ -69,8 +69,6 @@ public class VM2
 
 	public static void main( String [] args ) throws IncompatibleThreadStateException
    	{		
-		//Hashtable<LocalVariable> graph = new Hashtable<LocalVariable>();
-		//Vector<LocalVariable> graph= new Vector<LocalVariable>();
     	 try{
 		// establish the connection at port 8000
 		VirtualMachine vm = new VM2().connect( 8000 );
@@ -96,22 +94,17 @@ public class VM2
 					List<LocalVariable> l = s.visibleVariables();
 					for( LocalVariable lv : l )
 					{
-						//graph.add( lv );
-						//explored = new boolean[l.size()];
-				                //inpath = new boolean[l.size()];
-					 		
 						System.out.println(" local: " + lv.name() + " = " + s.getValue(lv));
-									
-						//ObjectNode on = new ObjectNode( lv.name() );
-						//Value v = s.getValue(lv);	
-						//ObjectReference o = (ObjectReference) v;
-                				List<Field> fields = obj.referenceType().fields();
+					 	// need to do search here
+						//search( s.getValue(lv, 1));				
+                			}
+					if( !object.equals("null") ){
+						List<Field> fields = obj.referenceType().fields();
                 				for( Field f: fields )
                 				{
                         				Value fval = obj.getValue( f );
                         				System.out.println( "***** field name " + f.name() + " ****field value " + fval + " *****type " + f.typeName() );
 						}
-//						search(  s.getValue(lv),  1 );//instead of 'on', use objfunc in VMtest.java
 					}
 					//put lv.name() as edges, s.getValue(lv) as object nodes & s as function nodes
 					
@@ -125,30 +118,31 @@ public class VM2
          		e.printStackTrace();
       		  }
 	}
+	
+	//need a recursive search method to look through all values of the local variables
+	public static void search( Value v , int depth )
+	{
+		if (value instanceof ObjectReference) {
+            		ObjectReference obj = (ObjectReference) v;
+            		List<Field> fields = obj.referenceType().fields();
+            
+           		 for (Field f : fields) {
+                		Value fval = obj.getValue(f);
+				//make tempgraph a global variable in VMtest
+				if( !tempGraph.contains( fval ) ) {
+					//add new node to tempGraph
+					search( fval, depth+1 );
+				}
+				else {
+					//.....
+				
+					
 
-//	public static boolean explored[];
-//       public static boolean inpath[];
 
-/*	
-	public static boolean dfs( Integer vertex , Vector<LocalVariable> graph)
-        {
-                explored[vertex] = true;
-                inpath[vertex] = true;
-                for( Integer neighbor : graph.get(vertex) )
-                {
-                        if( inpath[neighbor] )
-                                return true;
 
-                        if( !explored[neighbor] )
-                        {
-                                if( dfs( neighbor, graph ) )
-                                        return true;
-                        }
-                }
-                inpath[vertex] = false;
-                return false;
-        }//end dfs function
-*/
+
+
+
 	
 }// end class
 
