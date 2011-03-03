@@ -101,7 +101,7 @@ public class VM2
 				                //inpath = new boolean[l.size()];
 						
 						System.out.println(" local: " + lv.name() + " = " + s.getValue(lv));
-						
+									
 						//ObjectNode on = new ObjectNode( lv.name() );
 						//Value v = s.getValue(lv);	
 						//ObjectReference o = (ObjectReference) v;
