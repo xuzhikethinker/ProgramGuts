@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.util.Vector; 
 import com.sun.jdi.IncompatibleThreadStateException;
-import java.util.Hashtable;
-import java.util.Enumeration;
 
 /**
  * This is where the debugging and graph builder guys will put all of their
@@ -59,16 +57,6 @@ public class BuilderDebugger {
 		
 		String[] args = { "java", "../tools.jar:." };
 		progGraph = VMtest.main(args);
-
-
-		/* Below is how the information (once retrieved)
-		 * should fit into the hash table
-
-		*/
-
-		//might hafta make global
-		vectornodes -> Nodes have name field and value field
-
 	}
 
 	/**
@@ -83,8 +71,8 @@ public class BuilderDebugger {
 	 * 
 	 * @param name
 	 */
-	public void AddObjectNode(String name) {
-		ObjectNode newObject = new ObjectNode(name);
+	public void AddObjectNode(String name, String value) {
+		ObjectNode newObject = new ObjectNode(name, value);
 
 		progGraph.add(newObject);
 	}
@@ -95,16 +83,16 @@ public class BuilderDebugger {
 	 * @param from
 	 * @param to
 	 */
-	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to, String edgeName) {
+	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to) {
 		//to.ObjectsConnectedTo.add(from);
-		from.ObjectsConnectedTo.put(edgeName, to);
+		from.ObjectsConnectedTo.add(to);
 	}
 
 	/**
 	 * can use this func to add more function nodes to the graph
 	 */
-	public void AddFunctionNode(FunctionNode calledFrom, String name) {
-		FunctionNode newFunction = new FunctionNode(calledFrom, name,
+	public void AddFunctionNode(FunctionNode calledFrom, String name, String value) {
+		FunctionNode newFunction = new FunctionNode(calledFrom, name, value,
 				calledFrom.stackPosition + 1);
 
 		progGraph.add(newFunction);
@@ -117,8 +105,8 @@ public class BuilderDebugger {
 	 * @param to
 	 */
 	public void AddFunctionToObjectNodeConnection(FunctionNode from,
-			ObjectNode to, String edgeName) {
-		from.ObjectsConnectedTo.put(edgeName, to);
+			ObjectNode to) {
+		from.ObjectsConnectedTo.add(to);
 	}
 	
 	public static int findPrevFuncNode( Vector<Node> g ) {
