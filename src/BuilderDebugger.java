@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.Vector; 
 import com.sun.jdi.IncompatibleThreadStateException;
+import java.util.Hashtable;
+import java.util.Enumeration;
 
 /**
  * This is where the debugging and graph builder guys will put all of their
@@ -57,6 +59,16 @@ public class BuilderDebugger {
 		
 		String[] args = { "java", "../tools.jar:." };
 		progGraph = VMtest.main(args);
+
+
+		/* Below is how the information (once retrieved)
+		 * should fit into the hash table
+
+		*/
+
+		//might hafta make global
+		vectornodes -> Nodes have name field and value field
+
 	}
 
 	/**
