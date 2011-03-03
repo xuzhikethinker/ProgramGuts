@@ -148,36 +148,35 @@ public class ProgramGutsMain {
 	public static Vector<Node> sampleGraph() {
 		Vector<Node> graph = new Vector<Node>();
 
+		Random r = new Random();
 		FunctionNode testFunction1 = new FunctionNode();
 		graph.add(testFunction1);
 		graph.add(new FunctionNode((FunctionNode) graph.lastElement(),
-				"testFunction1", 1));
+				"testFunction1", String.valueOf(r.nextInt()), 1));
 		graph.add(new FunctionNode((FunctionNode) graph.lastElement(),
-				"testFunction2", 2));
+				"testFunction2", String.valueOf(r.nextInt()), 2));
 		// graph.add( new FunctionNode((FunctionNode)graph.lastElement(),
 		// "testFunction4", 4) );
 		FunctionNode testFunction4 = new FunctionNode((FunctionNode) graph
-				.lastElement(), "testFunction3", 3);
+				.lastElement(), "testFunction3",String.valueOf(r.nextInt()), 3);
 		graph.add(testFunction4);
 		Vector<ObjectNode> objectNodeCollection = new Vector<ObjectNode>();
 
 		for (int i = 0; i < 20; i++) {
 			String name = "Object " + i;
-			objectNodeCollection.add(new ObjectNode(name));
+			objectNodeCollection.add(new ObjectNode(name, String.valueOf(r.nextInt())));
 			graph.add(objectNodeCollection.get(i));
 		}
 
-		Random r = new Random();
+		//Random r = new Random();
 		for (int i = 0; i < 20; i++) {
 			int rand = r.nextInt(20);
-			objectNodeCollection.get(i).addConnection(objectNodeCollection.get(rand).name,
-					objectNodeCollection.get(rand));
+			objectNodeCollection.get(i).addConnection(objectNodeCollection.get(rand));
 			rand = r.nextInt(20);
-			objectNodeCollection.get(i).addConnection(objectNodeCollection.get(rand).name,
-					objectNodeCollection.get(rand));
+			objectNodeCollection.get(i).addConnection(objectNodeCollection.get(rand));
 
 		}
-		testFunction1.addConnection(objectNodeCollection.get(0).name, objectNodeCollection.get(0));
+		testFunction1.addConnection(objectNodeCollection.get(0));
 
 		return graph;
 
@@ -208,9 +207,7 @@ public class ProgramGutsMain {
 
 		/* add all connections from the graph to graphJUNG as edges */
 		for (Node n : graph) {
-			Set<String> connectionNames = n.ObjectsConnectedTo.keySet();
-			for ( String s : connectionNames ) {
-				Node o = n.ObjectsConnectedTo.get(s);
+			for ( Node o : n.ObjectsConnectedTo ) {
 				String edgeName = "edge" + edgeCount;
 				graphJUNG.addEdge(edgeName, n.vertexID, o.vertexID);
 				edgeCount++;
