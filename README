@@ -7,3 +7,6 @@ javac -cp /usr/lib/jvm/java-6-sun-1.6.0.22/lib/tools.jar VMtest.java
 java -cp /usr/lib/jvm/java-6-sun-1.6.0.22/lib/tools.jar:. VMtest
 
 can use the path to tools.jar as "../tools.jar:." b/c the file is now in our local repository
+
+compile and run (better, updated instructions):
+javac -cp ../tools.jar VM2.java && java -cp ../tools.jar:. VM2
