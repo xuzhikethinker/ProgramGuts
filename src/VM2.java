@@ -95,10 +95,10 @@ public class VM2
 					for( LocalVariable lv : l )
 					{
 						System.out.println(" local: " + lv.name() + " = " + s.getValue(lv));
-					 	// need to do search here
-						//search( s.getValue(lv, 1));				
+					 	// need to do recursve search here
+						search( s.getValue(lv) );				
                 			}
-					if( !object.equals("null") ){
+					if( !object.equals( "null" ) ){
 						List<Field> fields = obj.referenceType().fields();
                 				for( Field f: fields )
                 				{
@@ -118,24 +118,24 @@ public class VM2
          		e.printStackTrace();
       		  }
 	}
-	
 	//need a recursive search method to look through all values of the local variables
-	public static void search( Value v , int depth )
+	public static void search( Value v  )
 	{
-		if (v instanceof ObjectReference) {
-            		ObjectReference obj = (ObjectReference) v;
+		if( v instanceof ObjectReference ) {
+            		ObjectReference obj = ( ObjectReference ) v;
             		List<Field> fields = obj.referenceType().fields();
             
-           		 for (Field f : fields) {
-                		Value fval = obj.getValue(f);
+           		 for( Field f : fields ) {
+                		Value fval = obj.getValue( f );
 				//make tempgraph a global variable in VMtest
-				if( !tempGraph.contains( fval ) ) {
-					//add new node to tempGraph
-					search( fval, depth+1 );
-				}
-				else {
+			//	if( !tempGraph.contains( fval ) ) {
+					//add fval as a new node to tempGraph
+					System.out.println( fval );
+					search( fval );
+			//	}
+			//	else{
 					//.....
-				}	
+			//	}	
 			}	
 		}
 	}

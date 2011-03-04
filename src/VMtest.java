@@ -95,14 +95,7 @@ public class VMtest {
 					tempGraph.add(objfunc);
 
 					try {
-							//for each visible variable getvalue
-							for (LocalVariable lv : s.visibleVariables()) {
-								System.out.println("    local: " + lv.name()
-										+ " = " + s.getValue(lv));
-								ObjectNode objlv = new ObjectNode();
-								objlv.name = lv.name();
-								tempGraph.add(objlv);
-								objfunc.ObjectsConnectedTo.put(objlv.name, objlv);
+						//for each visible variable getvalue
 						// if (object != "null") {
 						for (LocalVariable lv : s.visibleVariables()) {
 							System.out.println(" local: " + lv.name() + " = "
