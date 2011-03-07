@@ -163,8 +163,8 @@ public class VMtest {
                               
                               else if( !tempGraph.contains( fval ) ) {
                                         //add fval as a new node to tempGraph
-                                        System.out.println( fval + " " + v );
-                                        ObjectNode tempObj = new ObjectNode(v.toString(), fval.toString());
+                                        System.out.println(f + " -> " + fval.type().name() + " " + fval );
+					ObjectNode tempObj = new ObjectNode(v.toString(), fval.toString());
                         
                                         tempObj.ObjectsConnectedTo.add(current);
                                         tempGraph.add( tempObj );

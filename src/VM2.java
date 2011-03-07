@@ -127,12 +127,15 @@ public class VM2
             
            		 for( Field f : fields ) {
                 		Value fval = obj.getValue( f );
+				if (fval == null || fval.equals(null) ) continue;
+				else{
 				// pass tempGraph as a parameter to search method in VMtest 
 			//	if( !tempGraph.contains( fval ) ) {
 					//add fval as a new node to tempGraph
-					System.out.println( fval + " " + v );
-					//BuilderDebugger.AddObjectNode( lv.name() , fval.toString() );
+					System.out.println(f + " -> " + fval.type().name() + " " + fval );
+					//BuilderDebugger.AddObjectNode( fval.type().name() , fval.toString() );
 					search( fval );
+				}//end else
 			//	}
 			//	else{
 					//.....
