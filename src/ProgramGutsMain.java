@@ -149,8 +149,8 @@ public class ProgramGutsMain {
 		Vector<Node> graph = new Vector<Node>();
 
 		Random r = new Random();
-		FunctionNode testFunction1 = new FunctionNode();
-		graph.add(testFunction1);
+		//FunctionNode testFunction1 = new FunctionNode();
+		//graph.add(testFunction1);
 		graph.add(new FunctionNode((FunctionNode) graph.lastElement(),
 				"testFunction1", String.valueOf(r.nextInt()), 1));
 		graph.add(new FunctionNode((FunctionNode) graph.lastElement(),
@@ -176,7 +176,7 @@ public class ProgramGutsMain {
 			objectNodeCollection.get(i).addConnection(objectNodeCollection.get(rand));
 
 		}
-		testFunction1.addConnection(objectNodeCollection.get(0));
+		//testFunction1.addConnection(objectNodeCollection.get(0));
 
 		return graph;
 

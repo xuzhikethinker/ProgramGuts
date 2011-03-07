@@ -18,12 +18,6 @@ public class Node {
     
     int stackPosition;
     
-    
-    /**
-     * Hashtable contains all the neighbors of this node
-     */
-    //Hashtable<String, Node> ObjectsConnectedTo = new Hashtable<String, Node>(); // string is edgename
-    //Vector<Node> noNameRefs = new Vector<Node>();
 
     Vector<Node> ObjectsConnectedTo = new Vector<Node>();
     /**

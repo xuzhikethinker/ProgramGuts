@@ -106,7 +106,7 @@ public class VMtest {
 							  objfunc.ObjectsConnectedTo.add(objlv);
 	
 							  // need to do recursve search here
-	                                                  search(s.getValue(l), tempGraph);
+	                          search(s.getValue(lv), tempGraph, objlv);
 
 						}	 
 							if (object != "null") {
@@ -129,8 +129,8 @@ public class VMtest {
 										}
 										ObjectNode objectN = new ObjectNode(f
 												.name(), value);
-										tempGraph.add(objectN);
-										objfunc.ObjectsConnectedTo.add(objectN);
+										//tempGraph.add(objectN);
+										//objfunc.ObjectsConnectedTo.add(objectN);
 									}
 								}
 							}
@@ -150,7 +150,7 @@ public class VMtest {
 	}
 
 	// recursive search method to look through all values of the local variables
-        public static void search( Value v  , Vector<Node> tempGraph ) {
+        public static void search( Value v  , Vector<Node> tempGraph, ObjectNode current ) {
                 if( v instanceof ObjectReference ) {
                         ObjectReference obj = ( ObjectReference ) v;
                         List<Field> fields = obj.referenceType().fields();
@@ -158,15 +158,19 @@ public class VMtest {
                          for( Field f : fields ) {
                                 Value fval = obj.getValue( f );
                                 // pass tempGraph as a parameter to search method in VMtest
-                              if( !tempGraph.contains( fval ) ) {
+                             
+                              if (fval == null || fval.equals(null) ) continue;
+                              
+                              else if( !tempGraph.contains( fval ) ) {
                                         //add fval as a new node to tempGraph
                                         System.out.println( fval + " " + v );
-                                        //BuilderDebugger.AddObjectNode( lv.name() , fval.toString() );
-                                        search( fval, tempGraph );
+                                        ObjectNode tempObj = new ObjectNode(v.toString(), fval.toString());
+                        
+                                        tempObj.ObjectsConnectedTo.add(current);
+                                        tempGraph.add( tempObj );
+                                        
+                                        search( fval, tempGraph, tempObj );
                               }
-                        //      else{
-                                        //.....
-                                //}
                         }
                 }
         }
