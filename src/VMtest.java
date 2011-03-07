@@ -104,7 +104,11 @@ public class VMtest {
 							  ObjectNode objlv = new ObjectNode(lv.name(), lv.name()); 
 							  tempGraph.add(objlv);
 							  objfunc.ObjectsConnectedTo.add(objlv);
-							 
+	
+							  // need to do recursve search here
+	                                                  search(s.getValue(l), tempGraph);
+
+						}	 
 							if (object != "null") {
 								/* new additions for fields and values */
 								List<Field> fields = obj.referenceType()
@@ -130,7 +134,7 @@ public class VMtest {
 									}
 								}
 							}
-						}
+					
 
 					} catch (AbsentInformationException e) {
 						e.printStackTrace();
@@ -144,4 +148,27 @@ public class VMtest {
 
 		return tempGraph;
 	}
+
+	// recursive search method to look through all values of the local variables
+        public static void search( Value v  , Vector<Node> tempGraph ) {
+                if( v instanceof ObjectReference ) {
+                        ObjectReference obj = ( ObjectReference ) v;
+                        List<Field> fields = obj.referenceType().fields();
+
+                         for( Field f : fields ) {
+                                Value fval = obj.getValue( f );
+                                // pass tempGraph as a parameter to search method in VMtest
+                              if( !tempGraph.contains( fval ) ) {
+                                        //add fval as a new node to tempGraph
+                                        System.out.println( fval + " " + v );
+                                        //BuilderDebugger.AddObjectNode( lv.name() , fval.toString() );
+                                        search( fval, tempGraph );
+                              }
+                        //      else{
+                                        //.....
+                                //}
+                        }
+                }
+        }
+
 }// end class

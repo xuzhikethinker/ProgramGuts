@@ -91,12 +91,12 @@ public class VM2
 				String object = ( obj == null ) ? "null" : obj.toString();
 				System.out.println( "Thread " + tr + " -> Frame " + s + " -> " + object );
 				try{
-					List<LocalVariable> l = s.visibleVariables();
-					for( LocalVariable lv : l )
+					List<LocalVariable> locals = s.visibleVariables();
+					for( LocalVariable lv : locals )
 					{
-						System.out.println(" local: " + lv.name() + " = " + s.getValue(lv));
+						System.out.println( " local: " + lv.name() + " = " + s.getValue( lv ) );
 					 	// need to do recursve search here
-						search( s.getValue(lv) );				
+						search( s.getValue( lv ) );				
                 			}
 					if( !object.equals( "null" ) ){
 						List<Field> fields = obj.referenceType().fields();
@@ -127,10 +127,11 @@ public class VM2
             
            		 for( Field f : fields ) {
                 		Value fval = obj.getValue( f );
-				//make tempgraph a global variable in VMtest
+				// pass tempGraph as a parameter to search method in VMtest 
 			//	if( !tempGraph.contains( fval ) ) {
 					//add fval as a new node to tempGraph
-					System.out.println( fval );
+					System.out.println( fval + " " + v );
+					//BuilderDebugger.AddObjectNode( lv.name() , fval.toString() );
 					search( fval );
 			//	}
 			//	else{
@@ -142,8 +143,6 @@ public class VM2
 
 
 
-
-	
 }// end class
 
 
