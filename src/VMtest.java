@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.Vector;
 
 import com.sun.jdi.AbsentInformationException;
@@ -67,7 +66,7 @@ public class VMtest {
 		int sfCt = 0;
 		try {
 			// establish the connection at port 8000
-			VirtualMachine vm = new VMtest().connect(8000);
+			VirtualMachine vm = VMtest.connect(8000);
 			vm.suspend();
 
 			// Get all threads from VM object
@@ -115,11 +114,13 @@ public class VMtest {
 
 								ObjectNode objlv = new ObjectNode(lv.name(), lv
 										.name());
+								
+								
 								tempGraph.add(objlv);
 								objfunc.ObjectsConnectedTo
 										.put(lv.name(), objlv);
 
-								// need to do recursve search here
+								// need to do recursive search here
 								search(s.getValue(lv), tempGraph, objlv);
 							}
 							if (object != "null") {
@@ -134,18 +135,9 @@ public class VMtest {
 												+ f.name()
 												+ " ****field value " + fval
 												+ " *****type " + f.typeName());
-										String value;
-										if (fval == null) {
-											value = "";
-										} else {
-											value = fval.toString();
-										}
-										ObjectNode objectN = new ObjectNode(f
-												.name(), value);
 									}
 								}
 							}
-
 						} catch (AbsentInformationException e) {
 							e.printStackTrace();
 						}
@@ -167,9 +159,7 @@ public class VMtest {
 			ObjectReference obj = (ObjectReference) v;
 			List<Field> fields = obj.referenceType().fields();
 
-			// for (Field f : fields) {
 			for (int i = 0; i < fields.size(); i++) {
-				// Value fval = obj.getValue(f);
 				Value fval = obj.getValue(fields.get(i));
 
 				// pass tempGraph as a parameter to search method in VMtest
@@ -178,28 +168,26 @@ public class VMtest {
 					continue;
 
 				else if (!tempGraph.contains(fval)) {
-					if (!fval.toString().startsWith("instance")) {
-						// add fval as a new node to tempGraph
+					if (fval.toString().startsWith("instance")) {
 						System.out.println(fields.get(i) + " -> "
 								+ fval.type().name() + " " + fval);
 
 						tempObj = new ObjectNode(fields.get(i).toString(), fval
 								.toString());
 
-						// tempObj.ObjectsConnectedTo.add(current);
 						tempGraph.add(tempObj);
-					} else {
-						// tempInstOf = f.toString();
+					
 						tempInstOf = fields.get(i).toString();
 						tempObj.name = tempInstOf;
 						tempObj.ObjectsConnectedTo.put(tempInstOf, current);
+						search(fval, tempGraph, tempObj);
 					}
-					search(fval, tempGraph, tempObj);
+					else {}
+					
 				}
 			}
-		} else {
-			// add edge here and not a new object node
+		} else 
+		{
 		}
 	}
-
-}// end class
+}
