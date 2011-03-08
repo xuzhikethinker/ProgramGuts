@@ -80,7 +80,7 @@ public class VMtest {
 
 				boolean atMain = false;
 
-				// go through stack frames and get objects
+				// goes through stack frames and gets objects
 				for (StackFrame s : frames) {
 					ObjectReference obj = s.thisObject();
 					String object = (obj == null) ? "null" : obj.toString();
