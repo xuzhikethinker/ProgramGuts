@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.Vector;
 
 import com.sun.jdi.AbsentInformationException;
@@ -22,6 +23,10 @@ import com.sun.jdi.connect.Connector;
 import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 
 public class VMtest {
+
+	static ObjectNode tempObj;
+	static String tempInstOf;
+
 	public static VirtualMachine connect(int port) throws IOException {
 		String strPort = Integer.toString(port);
 		AttachingConnector connector = getConnector();
@@ -59,9 +64,8 @@ public class VMtest {
 			throws IncompatibleThreadStateException {
 
 		Vector<Node> tempGraph = new Vector<Node>();
+		int sfCt = 0;
 		try {
-
-			// VirtualMachine v = connect(8000);
 			// establish the connection at port 8000
 			VirtualMachine vm = new VMtest().connect(8000);
 			vm.suspend();
@@ -83,9 +87,11 @@ public class VMtest {
 					String object = (obj == null) ? "null" : obj.toString();
 					System.out.println("Thread " + tr + " -> Frame " + s
 							+ " -> " + object);
-					if (s.toString().startsWith("Interesting")) {
+					if (sfCt > 10) {
 						atMain = true;
 					}
+					else
+						sfCt++;
 
 					if (atMain) {
 						FunctionNode objfunc;
@@ -103,7 +109,6 @@ public class VMtest {
 
 						try {
 							// for each visible variable getvalue
-							// if (object != "null") {
 							for (LocalVariable lv : s.visibleVariables()) {
 								System.out.println(" local: " + lv.name()
 										+ " = " + s.getValue(lv));
@@ -111,11 +116,11 @@ public class VMtest {
 								ObjectNode objlv = new ObjectNode(lv.name(), lv
 										.name());
 								tempGraph.add(objlv);
-								objfunc.ObjectsConnectedTo.add(objlv);
+								objfunc.ObjectsConnectedTo
+										.put(lv.name(), objlv);
 
 								// need to do recursve search here
 								search(s.getValue(lv), tempGraph, objlv);
-
 							}
 							if (object != "null") {
 								/* new additions for fields and values */
@@ -137,8 +142,6 @@ public class VMtest {
 										}
 										ObjectNode objectN = new ObjectNode(f
 												.name(), value);
-										// tempGraph.add(objectN);
-										// objfunc.ObjectsConnectedTo.add(objectN);
 									}
 								}
 							}
@@ -164,27 +167,38 @@ public class VMtest {
 			ObjectReference obj = (ObjectReference) v;
 			List<Field> fields = obj.referenceType().fields();
 
-			for (Field f : fields) {
-				Value fval = obj.getValue(f);
+			// for (Field f : fields) {
+			for (int i = 0; i < fields.size(); i++) {
+				// Value fval = obj.getValue(f);
+				Value fval = obj.getValue(fields.get(i));
+
 				// pass tempGraph as a parameter to search method in VMtest
 
 				if (fval == null || fval.equals(null))
 					continue;
 
 				else if (!tempGraph.contains(fval)) {
-					// add fval as a new node to tempGraph
-					System.out.println(f + " -> " + fval.type().name() + " "
-							+ fval);
-					
-					ObjectNode tempObj = new ObjectNode(f.toString(), fval
-							.toString());
+					if (!fval.toString().startsWith("instance")) {
+						// add fval as a new node to tempGraph
+						System.out.println(fields.get(i) + " -> "
+								+ fval.type().name() + " " + fval);
 
-					tempObj.ObjectsConnectedTo.add(current);
-					tempGraph.add(tempObj);
+						tempObj = new ObjectNode(fields.get(i).toString(), fval
+								.toString());
 
+						// tempObj.ObjectsConnectedTo.add(current);
+						tempGraph.add(tempObj);
+					} else {
+						// tempInstOf = f.toString();
+						tempInstOf = fields.get(i).toString();
+						tempObj.name = tempInstOf;
+						tempObj.ObjectsConnectedTo.put(tempInstOf, current);
+					}
 					search(fval, tempGraph, tempObj);
 				}
 			}
+		} else {
+			// add edge here and not a new object node
 		}
 	}
 
