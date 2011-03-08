@@ -18,11 +18,7 @@ public class BuilderDebugger {
 
 	Vector<Node> progGraph;
 
-	// int VectorCount = 0; -> only need if we can call stack trace on an
-	// external program
-
 	public BuilderDebugger() {
-
 		progGraph = new Vector<Node>();
 
 		// starts node list with main FunctionNode
@@ -39,23 +35,7 @@ public class BuilderDebugger {
 
 		/*
 		 * makes call to VMtest main
-		 */
-		
-		/*
-		 * Attempting to run outside process by call from here
-		 
-		String testProgSrcName = "Interesting.java";
-		String testProg = testProgSrcName.substring(0, testProgSrcName.length()-5);
-		String testCMD = "java -Xdebug -Xrunjdwp:transport=dt_socket," +
-				"address=8000,server=y,suspend=n " + testProg;
-		String compile = "javac " + testProgSrcName; 
-		
-		Runtime rt = Runtime.getRuntime();
-        rt.exec(compile);
-        rt.exec(testCMD);
-
-		*/
-		
+		*/		
 		String[] args = { "java", "../tools.jar:." };
 		progGraph = VMtest.main(args);
 	}
@@ -84,9 +64,9 @@ public class BuilderDebugger {
 	 * @param from
 	 * @param to
 	 */
-	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to) {
+	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to, String name) {
 		//to.ObjectsConnectedTo.add(from);
-		from.ObjectsConnectedTo.add(to);
+		from.ObjectsConnectedTo.put(name, to);
 	}
 
 	/**
@@ -105,9 +85,9 @@ public class BuilderDebugger {
 	 * @param from
 	 * @param to
 	 */
-	public void AddFunctionToObjectNodeConnection(FunctionNode from,
+	public void AddFunctionToObjectNodeConnection(String name, FunctionNode from,
 			ObjectNode to) {
-		from.ObjectsConnectedTo.add(to);
+		from.ObjectsConnectedTo.put(name, to);
 	}
 	
 	public static int findPrevFuncNode( Vector<Node> g ) {
