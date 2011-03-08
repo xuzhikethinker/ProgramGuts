@@ -21,7 +21,7 @@ public class FunctionNode extends Node {
 			super.name = name;
 			super.value = value;
             super.nodeType = "function";
-            super.addConnection(calledFrom);
+            super.addConnection(name, calledFrom);
             super.stackPosition = position;
 	}
 

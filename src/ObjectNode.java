@@ -4,7 +4,7 @@
 
 public class ObjectNode extends Node {
 
-	String name;
+	//String name;
 
 	/**
 	 * constructor

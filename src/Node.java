@@ -19,7 +19,8 @@ public class Node {
     int stackPosition;
     
 
-    Vector<Node> ObjectsConnectedTo = new Vector<Node>();
+    //Vector<Node> ObjectsConnectedTo = new Vector<Node>();
+    Hashtable<String,Node> ObjectsConnectedTo = new Hashtable<String,Node>();
     /**
      * generic constructor for node class
      */
@@ -32,8 +33,8 @@ public class Node {
      * @param edgeName
      * @param connectedTo
      */
-    public void addConnection(Node connectedTo) {
-        ObjectsConnectedTo.add(connectedTo);
+    public void addConnection(String edgeName, Node connectedTo) {
+        ObjectsConnectedTo.put(edgeName, connectedTo);
     }
 	
 }
