@@ -176,9 +176,13 @@ public class ProgramGutsMain {
 
         /* add all connections from the graph to graphJUNG as edges */
         for (Node n : graph) {
-            for ( Node o : n.ObjectsConnectedTo ) {
+        	//for ( int i = 0; i < n.ObjectsConnectedTo.size(); i++ )
+        	Set<String> keys = n.ObjectsConnectedTo.keySet();
+        	for ( String s : keys) 
+        	{
                 String edgeName = "edge" + edgeCount;
-                graphJUNG.addEdge(edgeName, o.vertexID, n.vertexID);
+                graphJUNG.addEdge(edgeName, n.ObjectsConnectedTo.get(s).vertexID, n.vertexID);
+                //graphJUNG.addEdge(edgeName, n.ObjectsConnectedTo.get(i).vertexID, n.vertexID);
                 edgeCount++;
             }
         }
