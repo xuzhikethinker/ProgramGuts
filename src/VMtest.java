@@ -74,7 +74,7 @@ public class VMtest {
 			for (ThreadReference tr : threads) {
 				List<StackFrame> frames = new ArrayList<StackFrame>();
 				frames = tr.frames();
-				
+
 				boolean atMain = false;
 
 				// go through stack frames and get objects
@@ -83,13 +83,11 @@ public class VMtest {
 					String object = (obj == null) ? "null" : obj.toString();
 					System.out.println("Thread " + tr + " -> Frame " + s
 							+ " -> " + object);
-					if ( s.toString().startsWith("Interesting")) 
-					{
+					if (s.toString().startsWith("Interesting")) {
 						atMain = true;
 					}
-					
-					if ( atMain )
-					{
+
+					if (atMain) {
 						FunctionNode objfunc;
 						int calledFrom = BuilderDebugger
 								.findPrevFuncNode(tempGraph);
@@ -102,49 +100,49 @@ public class VMtest {
 									.get(calledFrom).stackPosition + 1);
 						}
 						tempGraph.add(objfunc);
-	
+
 						try {
-							//for each visible variable getvalue
+							// for each visible variable getvalue
 							// if (object != "null") {
 							for (LocalVariable lv : s.visibleVariables()) {
-								System.out.println(" local: " + lv.name() + " = "
-										+ s.getValue(lv));
-								
-								  ObjectNode objlv = new ObjectNode(lv.name(), lv.name()); 
-								  tempGraph.add(objlv);
-								  objfunc.ObjectsConnectedTo.add(objlv);
-		
-								  // need to do recursve search here
-		                          search(s.getValue(lv), tempGraph, objlv);
-	
-							}	 
-								if (object != "null") {
-									/* new additions for fields and values */
-									List<Field> fields = obj.referenceType()
-											.fields();
-									for (Field f : fields) {
-										if (f.typeName() == null) {
+								System.out.println(" local: " + lv.name()
+										+ " = " + s.getValue(lv));
+
+								ObjectNode objlv = new ObjectNode(lv.name(), lv
+										.name());
+								tempGraph.add(objlv);
+								objfunc.ObjectsConnectedTo.add(objlv);
+
+								// need to do recursve search here
+								search(s.getValue(lv), tempGraph, objlv);
+
+							}
+							if (object != "null") {
+								/* new additions for fields and values */
+								List<Field> fields = obj.referenceType()
+										.fields();
+								for (Field f : fields) {
+									if (f.typeName() == null) {
+									} else {
+										Value fval = obj.getValue(f);
+										System.out.println("***** field name "
+												+ f.name()
+												+ " ****field value " + fval
+												+ " *****type " + f.typeName());
+										String value;
+										if (fval == null) {
+											value = "";
 										} else {
-											Value fval = obj.getValue(f);
-											System.out.println("***** field name "
-													+ f.name()
-													+ " ****field value " + fval
-													+ " *****type " + f.typeName());
-											String value;
-											if (fval == null) {
-												value = "";
-											} else {
-												value = fval.toString();
-											}
-											ObjectNode objectN = new ObjectNode(f
-													.name(), value);
-											//tempGraph.add(objectN);
-											//objfunc.ObjectsConnectedTo.add(objectN);
+											value = fval.toString();
 										}
+										ObjectNode objectN = new ObjectNode(f
+												.name(), value);
+										// tempGraph.add(objectN);
+										// objfunc.ObjectsConnectedTo.add(objectN);
 									}
 								}
-						
-	
+							}
+
 						} catch (AbsentInformationException e) {
 							e.printStackTrace();
 						}
@@ -160,29 +158,34 @@ public class VMtest {
 	}
 
 	// recursive search method to look through all values of the local variables
-        public static void search( Value v  , Vector<Node> tempGraph, ObjectNode current ) {
-                if( v instanceof ObjectReference ) {
-                        ObjectReference obj = ( ObjectReference ) v;
-                        List<Field> fields = obj.referenceType().fields();
+	public static void search(Value v, Vector<Node> tempGraph,
+			ObjectNode current) {
+		if (v instanceof ObjectReference) {
+			ObjectReference obj = (ObjectReference) v;
+			List<Field> fields = obj.referenceType().fields();
 
-                         for( Field f : fields ) {
-                                Value fval = obj.getValue( f );
-                                // pass tempGraph as a parameter to search method in VMtest
-                             
-                              if (fval == null || fval.equals(null) ) continue;
-                              
-                              else if( !tempGraph.contains( fval ) ) {
-                                        //add fval as a new node to tempGraph
-                                        System.out.println(f + " -> " + fval.type().name() + " " + fval );
-					ObjectNode tempObj = new ObjectNode(v.toString(), fval.toString());
-                        
-                                        tempObj.ObjectsConnectedTo.add(current);
-                                        tempGraph.add( tempObj );
-                                        
-                                        search( fval, tempGraph, tempObj );
-                              }
-                        }
-                }
-        }
+			for (Field f : fields) {
+				Value fval = obj.getValue(f);
+				// pass tempGraph as a parameter to search method in VMtest
+
+				if (fval == null || fval.equals(null))
+					continue;
+
+				else if (!tempGraph.contains(fval)) {
+					// add fval as a new node to tempGraph
+					System.out.println(f + " -> " + fval.type().name() + " "
+							+ fval);
+					
+					ObjectNode tempObj = new ObjectNode(f.toString(), fval
+							.toString());
+
+					tempObj.ObjectsConnectedTo.add(current);
+					tempGraph.add(tempObj);
+
+					search(fval, tempGraph, tempObj);
+				}
+			}
+		}
+	}
 
 }// end class
