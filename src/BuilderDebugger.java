@@ -22,6 +22,7 @@ public class BuilderDebugger {
 	// external program
 
 	public BuilderDebugger() {
+
 		progGraph = new Vector<Node>();
 
 		// starts node list with main FunctionNode
