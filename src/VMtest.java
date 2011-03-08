@@ -74,6 +74,8 @@ public class VMtest {
 			for (ThreadReference tr : threads) {
 				List<StackFrame> frames = new ArrayList<StackFrame>();
 				frames = tr.frames();
+				
+				boolean atMain = false;
 
 				// go through stack frames and get objects
 				for (StackFrame s : frames) {
@@ -81,63 +83,71 @@ public class VMtest {
 					String object = (obj == null) ? "null" : obj.toString();
 					System.out.println("Thread " + tr + " -> Frame " + s
 							+ " -> " + object);
-					FunctionNode objfunc;
-					int calledFrom = BuilderDebugger
-							.findPrevFuncNode(tempGraph);
-					if (calledFrom == -1) {
-						objfunc = new FunctionNode();
-					} else {
-						objfunc = new FunctionNode((FunctionNode) tempGraph
-								.get(calledFrom), s.toString(), String
-								.valueOf(s.hashCode()), tempGraph
-								.get(calledFrom).stackPosition + 1);
+					if ( s.toString().startsWith("Interesting")) 
+					{
+						atMain = true;
 					}
-					tempGraph.add(objfunc);
-
-					try {
-						//for each visible variable getvalue
-						// if (object != "null") {
-						for (LocalVariable lv : s.visibleVariables()) {
-							System.out.println(" local: " + lv.name() + " = "
-									+ s.getValue(lv));
-							
-							  ObjectNode objlv = new ObjectNode(lv.name(), lv.name()); 
-							  tempGraph.add(objlv);
-							  objfunc.ObjectsConnectedTo.add(objlv);
+					
+					if ( atMain )
+					{
+						FunctionNode objfunc;
+						int calledFrom = BuilderDebugger
+								.findPrevFuncNode(tempGraph);
+						if (calledFrom == -1) {
+							objfunc = new FunctionNode();
+						} else {
+							objfunc = new FunctionNode((FunctionNode) tempGraph
+									.get(calledFrom), s.toString(), String
+									.valueOf(s.hashCode()), tempGraph
+									.get(calledFrom).stackPosition + 1);
+						}
+						tempGraph.add(objfunc);
 	
-							  // need to do recursve search here
-	                          search(s.getValue(lv), tempGraph, objlv);
-
-						}	 
-							if (object != "null") {
-								/* new additions for fields and values */
-								List<Field> fields = obj.referenceType()
-										.fields();
-								for (Field f : fields) {
-									if (f.typeName() == null) {
-									} else {
-										Value fval = obj.getValue(f);
-										System.out.println("***** field name "
-												+ f.name()
-												+ " ****field value " + fval
-												+ " *****type " + f.typeName());
-										String value;
-										if (fval == null) {
-											value = "";
+						try {
+							//for each visible variable getvalue
+							// if (object != "null") {
+							for (LocalVariable lv : s.visibleVariables()) {
+								System.out.println(" local: " + lv.name() + " = "
+										+ s.getValue(lv));
+								
+								  ObjectNode objlv = new ObjectNode(lv.name(), lv.name()); 
+								  tempGraph.add(objlv);
+								  objfunc.ObjectsConnectedTo.add(objlv);
+		
+								  // need to do recursve search here
+		                          search(s.getValue(lv), tempGraph, objlv);
+	
+							}	 
+								if (object != "null") {
+									/* new additions for fields and values */
+									List<Field> fields = obj.referenceType()
+											.fields();
+									for (Field f : fields) {
+										if (f.typeName() == null) {
 										} else {
-											value = fval.toString();
+											Value fval = obj.getValue(f);
+											System.out.println("***** field name "
+													+ f.name()
+													+ " ****field value " + fval
+													+ " *****type " + f.typeName());
+											String value;
+											if (fval == null) {
+												value = "";
+											} else {
+												value = fval.toString();
+											}
+											ObjectNode objectN = new ObjectNode(f
+													.name(), value);
+											//tempGraph.add(objectN);
+											//objfunc.ObjectsConnectedTo.add(objectN);
 										}
-										ObjectNode objectN = new ObjectNode(f
-												.name(), value);
-										//tempGraph.add(objectN);
-										//objfunc.ObjectsConnectedTo.add(objectN);
 									}
 								}
-							}
-					
-
-					} catch (AbsentInformationException e) {
-						e.printStackTrace();
+						
+	
+						} catch (AbsentInformationException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
