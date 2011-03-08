@@ -178,7 +178,7 @@ public class ProgramGutsMain {
         for (Node n : graph) {
             for ( Node o : n.ObjectsConnectedTo ) {
                 String edgeName = "edge" + edgeCount;
-                graphJUNG.addEdge(edgeName, n.vertexID, o.vertexID);
+                graphJUNG.addEdge(edgeName, o.vertexID, n.vertexID);
                 edgeCount++;
             }
         }
