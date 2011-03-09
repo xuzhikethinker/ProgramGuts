@@ -20,9 +20,6 @@ public class BuilderDebugger {
 
 	public BuilderDebugger() {
 		progGraph = new Vector<Node>();
-
-		// starts node list with main FunctionNode
-		// progGraph.add( new FunctionNode() );
 	}
 
 	/**
@@ -65,7 +62,6 @@ public class BuilderDebugger {
 	 * @param to
 	 */
 	public void AddObjectNodeConnection(ObjectNode from, ObjectNode to, String name) {
-		//to.ObjectsConnectedTo.add(from);
 		from.ObjectsConnectedTo.put(name, to);
 	}
 
@@ -73,7 +69,8 @@ public class BuilderDebugger {
 	 * can use this func to add more function nodes to the graph
 	 */
 	public void AddFunctionNode(FunctionNode calledFrom, String name, String value) {
-		FunctionNode newFunction = new FunctionNode(calledFrom, name, value,
+		
+                FunctionNode newFunction = new FunctionNode(calledFrom, name, value,
 				calledFrom.stackPosition + 1);
 
 		progGraph.add(newFunction);
