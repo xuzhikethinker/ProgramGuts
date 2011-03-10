@@ -117,11 +117,16 @@ public class VMtest {
 								System.out.println(" local: " + lv.name()
 										+ " = " + s.getValue(lv));
 
-								ObjectNode objlv = new ObjectNode(lv.name(), lv.name());
 								
+								ObjectNode objlv;
+								if (objectHash.contains(s.getValue(lv)))
+									objlv = objectHash.get(s.getValue(lv));
+								else {
+									objlv = new ObjectNode(lv.name(), s.getValue(lv).toString());
+									tempGraph.add(objlv);
+									objectHash.put(s.getValue(lv), objlv);
+								}
 								
-								tempGraph.add(objlv);
-								objectHash.put(s.getValue(lv), objlv);
 								objfunc.ObjectsConnectedTo.put(lv.name(), objlv);
 
 								// do recursive search 
@@ -174,12 +179,16 @@ public class VMtest {
 					if (fval.toString().startsWith("instance")) {
 						System.out.println(fields.get(i) + " -> "
 								+ fval.type().name() + " " + fval);
-
-						tempObj = new ObjectNode(fields.get(i).toString(), fval
-								.toString());
-						tempGraph.add(tempObj);
-						remember.add(fval);
-						objectHash.put(fval, tempObj);
+						
+						if (objectHash.containsKey(fval))
+							tempObj = objectHash.get(fval);
+						else {
+							tempObj = new ObjectNode(fields.get(i).toString(), fval.toString());
+							tempGraph.add(tempObj);
+							remember.add(fval);
+							objectHash.put(fval, tempObj);
+						}
+						
 						tempInstOf = fields.get(i).toString();
 						tempObj.name = tempInstOf;
 						tempObj.ObjectsConnectedTo.put(tempInstOf, current);
@@ -188,9 +197,8 @@ public class VMtest {
 				} else {
 					tempObj = objectHash.get(fval);
 					tempInstOf = fields.get(i).toString();
-					tempObj.name = tempInstOf;
+					//tempObj.name = tempInstOf;
 					tempObj.ObjectsConnectedTo.put(tempInstOf, current);	
-					//objectHash.put(fval, tempObj);
 				}
 			}
 		} 
