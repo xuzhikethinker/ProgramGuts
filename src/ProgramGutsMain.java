@@ -30,6 +30,7 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 public class ProgramGutsMain {
 
 	static BuilderDebugger bd;
+	static Graphics graphics;
 	static int functionCount = 0;
 
 	public static void main(String args[])
@@ -37,6 +38,8 @@ public class ProgramGutsMain {
 
 		/* Set up frame and menu */
 		JFrame f = new JFrame("VisiGuts");
+		
+		/* Add menu to frame */
 		JMenuBar mb = new JMenuBar();
 		JMenu menu = new JMenu("File");
 		JMenuItem save = new JMenuItem("Save");
@@ -45,6 +48,8 @@ public class ProgramGutsMain {
 		mb.add(menu);
 		menu.add(save);
 		menu.add(close);
+		
+		/*set up frame */
 		f.setJMenuBar(mb);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,82 +63,20 @@ public class ProgramGutsMain {
 		final Vector<Node> graph = bd.getGraph();
 
 		/* Set up graph for JUNG */
-		final Graph<Integer, String> graphJUNG = convertToJUNGGraph(graph);
+		final Graph<Integer, String> graphJUNG = graphics.convertToJUNGGraph(graph);
 
+		/* initialize layout */
 		ISOMLayout<Integer, String> layout = new ISOMLayout(graphJUNG);
 		layout.setSize(new Dimension(800, 600));
 
-		VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(
-				layout);
+		
+		VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(layout);
 		vv.setPreferredSize(new Dimension(1200, 800));
+		
+		graphics.formatGraph(vv,graph,graphJUNG);
 
 		/* Menu item listener for saving the Visualization Viewer as a jpg */
 		save.addActionListener(new SaveGraph(vv, f));
-
-		/*
-		 * Set transformers in the visualization viewer for proper JUNG
-		 * formatting
-		 */
-
-		/* Render Colors for Object and Function Vertex */
-		vv.getRenderContext().setVertexFillPaintTransformer(
-				new Transformer<Integer, Paint>() {
-
-					private final Color[] palette = { Color.GREEN, Color.WHITE,
-							Color.RED };
-
-					public Paint transform(Integer i) {
-						if (graph.get(i).nodeType.equals("object")) {
-							return palette[0];
-						} else {
-							return palette[1];
-						}
-					}
-				});
-
-		/* Render Shape for Object and Function Vertex */
-		vv.getRenderContext().setVertexShapeTransformer(
-				new Transformer<Integer, Shape>() {
-					private final Shape[] styles = {
-							new Rectangle(-20, -10, 40, 20),
-							new Ellipse2D.Double(-25, -10, 50, 20) };
-
-					@Override
-					public Shape transform(Integer i) {
-						if (graph.get(i).nodeType.equals("function")) {
-							return styles[0];
-						} else {
-							return styles[1];
-						}
-					}
-				});
-
-		/* Render Edge Label Edges */
-		vv.getRenderContext().setEdgeLabelTransformer(
-				new Transformer<String, String>() {
-
-					public String transform(String edgeName) {
-						if (graph.get(graphJUNG.getEndpoints(edgeName)
-								.getSecond()).nodeType.equals("object"))
-							return graph.get(graphJUNG.getEndpoints(edgeName)
-									.getSecond()).name;
-						else
-							return "";
-					}
-				});
-		/* Render Vertex Labels */
-		vv.getRenderContext().setVertexLabelTransformer(
-				new Transformer<Integer, String>() {
-
-					public String transform(Integer i) {
-						if (graph.get(i).nodeType.equals("function")) {
-							return graph.get(i).name;
-						} else {
-							return graph.get(i).value;
-
-						}
-					}
-				});
 
 		/* JUNG Mouse configuration */
 		DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
@@ -144,44 +87,6 @@ public class ProgramGutsMain {
 		f.pack();
 
 	}
-
-	/**
-	 * Converts a node graph to a JUNG formatted graph
-	 * 
-	 * @param graph
-	 * @return
-	 */
-	public static Graph convertToJUNGGraph(Vector<Node> graph) {
-
-		Graph<Integer, String> graphJUNG = new DirectedOrderedSparseMultigraph<Integer, String>();
-		int edgeCount = 0; /*
-							 * monitors the number of edges being added to the
-							 * graphJUNG graph
-							 */
-
-		/* add each node from the graph to the JUNGgraph */
-		for (int i = 0; i < graph.size(); i++) {
-			graph.get(i).vertexID = i; /*
-										 * give each node from the graph a
-										 * vertex ID
-										 */
-			graphJUNG.addVertex(i);
-		}
-
-		/* add all connections from the graph to graphJUNG as edges */
-		for (Node n : graph) {
-			// for ( int i = 0; i < n.ObjectsConnectedTo.size(); i++ )
-			Set<String> keys = n.ObjectsConnectedTo.keySet();
-			for (String s : keys) {
-				String edgeName = "edge" + edgeCount;
-				graphJUNG.addEdge(edgeName,
-						n.ObjectsConnectedTo.get(s).vertexID, n.vertexID);
-				// graphJUNG.addEdge(edgeName,
-				// n.ObjectsConnectedTo.get(i).vertexID, n.vertexID);
-				edgeCount++;
-			}
-		}
-
-		return graphJUNG;
-	}
 }
+
+
