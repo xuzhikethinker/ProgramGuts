@@ -2,8 +2,11 @@
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.sun.jdi.AbsentInformationException;
@@ -25,7 +28,9 @@ public class VMtest {
 
 	static ObjectNode tempObj;
 	static String tempInstOf;
-
+	static Set<Value> remember = new HashSet<Value>();
+	static Hashtable<Value, ObjectNode> objectHash = new Hashtable<Value, ObjectNode>();
+	
 	public static VirtualMachine connect(int port) throws IOException {
 		String strPort = Integer.toString(port);
 		AttachingConnector connector = getConnector();
@@ -80,7 +85,7 @@ public class VMtest {
 
 				boolean atMain = false;
 
-				// goes through stack frames and gets objects
+				// go through stack frames and get objects
 				for (StackFrame s : frames) {
 					ObjectReference obj = s.thisObject();
 					String object = (obj == null) ? "null" : obj.toString();
@@ -107,26 +112,25 @@ public class VMtest {
 						tempGraph.add(objfunc);
 
 						try {
-							// for each visible variable getvalue
+							// for each visible variable, get the value
 							for (LocalVariable lv : s.visibleVariables()) {
 								System.out.println(" local: " + lv.name()
 										+ " = " + s.getValue(lv));
 
-								ObjectNode objlv = new ObjectNode(lv.name(), lv
-										.name());
+								ObjectNode objlv = new ObjectNode(lv.name(), lv.name());
 								
 								
 								tempGraph.add(objlv);
-								objfunc.ObjectsConnectedTo
-										.put(lv.name(), objlv);
+								objectHash.put(s.getValue(lv), objlv);
+								objfunc.ObjectsConnectedTo.put(lv.name(), objlv);
 
-								// need to do recursive search here
-								search(s.getValue(lv), tempGraph, objlv);
+								// do recursive search 
+								if( !remember.contains(s.getValue(lv)))
+									search(s.getValue(lv), tempGraph, objlv);
 							}
 							if (object != "null") {
-								/* new additions for fields and values */
-								List<Field> fields = obj.referenceType()
-										.fields();
+								// look through fields and get values
+								List<Field> fields = obj.referenceType().fields();
 								for (Field f : fields) {
 									if (f.typeName() == null) {
 									} else {
@@ -155,6 +159,7 @@ public class VMtest {
 	// recursive search method to look through all values of the local variables
 	public static void search(Value v, Vector<Node> tempGraph,
 			ObjectNode current) {
+		
 		if (v instanceof ObjectReference) {
 			ObjectReference obj = (ObjectReference) v;
 			List<Field> fields = obj.referenceType().fields();
@@ -162,32 +167,33 @@ public class VMtest {
 			for (int i = 0; i < fields.size(); i++) {
 				Value fval = obj.getValue(fields.get(i));
 
-				// pass tempGraph as a parameter to search method in VMtest
-
 				if (fval == null || fval.equals(null))
 					continue;
 
-				else if (!tempGraph.contains(fval)) {
+				else if (!remember.contains(fval)) {
 					if (fval.toString().startsWith("instance")) {
 						System.out.println(fields.get(i) + " -> "
 								+ fval.type().name() + " " + fval);
 
 						tempObj = new ObjectNode(fields.get(i).toString(), fval
 								.toString());
-
 						tempGraph.add(tempObj);
-					
+						remember.add(fval);
+						objectHash.put(fval, tempObj);
 						tempInstOf = fields.get(i).toString();
 						tempObj.name = tempInstOf;
 						tempObj.ObjectsConnectedTo.put(tempInstOf, current);
 						search(fval, tempGraph, tempObj);
 					}
-					else {}
-					
+				} else {
+					tempObj = objectHash.get(fval);
+					tempInstOf = fields.get(i).toString();
+					tempObj.name = tempInstOf;
+					tempObj.ObjectsConnectedTo.put(tempInstOf, current);	
+					//objectHash.put(fval, tempObj);
 				}
 			}
-		} else 
-		{
-		}
+		} 
 	}
 }
+//in output of graph head and tail should be names on the edges -- instance of... should be the name of the node
