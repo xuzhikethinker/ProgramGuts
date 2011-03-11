@@ -73,6 +73,7 @@ public class Graphics {
          */
 
         /* Render Colors for Object and Function Vertex */
+        /* Modified from http://kahdev.wordpress.com/2010/01/30/controlling-the-appearance-of-vertices-and-edges-in-jung/ */
         vv.getRenderContext().setVertexFillPaintTransformer(
                 new Transformer<Integer, Paint>() {
 
@@ -89,6 +90,7 @@ public class Graphics {
                 });
 
         /* Render Shape for Object and Function Vertex */
+        /* Modified from http://kahdev.wordpress.com/2010/01/30/controlling-the-appearance-of-vertices-and-edges-in-jung/ */
         vv.getRenderContext().setVertexShapeTransformer(
                 new Transformer<Integer, Shape>() {
                     private final Shape[] styles = {
