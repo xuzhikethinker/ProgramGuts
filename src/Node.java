@@ -28,7 +28,8 @@ public class Node {
      * @param connectedTo
      */
     public void addConnection(String edgeName, Node connectedTo) {
-        ObjectsConnectedTo.put(edgeName, connectedTo);
+        System.out.println("Connecting " + name + " to " + connectedTo.name + " via " + edgeName);
+        connectedTo.ObjectsConnectedTo.put(edgeName, this);
     }
 	
 }
