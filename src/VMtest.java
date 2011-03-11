@@ -26,182 +26,166 @@ import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 
 public class VMtest {
 
-	static ObjectNode tempObj;
-	static String tempInstOf;
-	static Set<Value> remember = new HashSet<Value>();
-	static Hashtable<Value, ObjectNode> objectHash = new Hashtable<Value, ObjectNode>();
-	
-	public static VirtualMachine connect(int port) throws IOException {
-		String strPort = Integer.toString(port);
-		AttachingConnector connector = getConnector();
-		try {
-			VirtualMachine vm = connect(connector, strPort);
-			return vm;
-		} catch (IllegalConnectorArgumentsException e) {
-			throw new IllegalStateException(e);
-		}
-	}
+    static Set<Value> remember = new HashSet<Value>();
+    static Hashtable<Value, ObjectNode> objectHash = new Hashtable<Value, ObjectNode>();
 
-	private static AttachingConnector getConnector() {
-		VirtualMachineManager vmManager = Bootstrap.virtualMachineManager();
-		for (Connector connector : vmManager.attachingConnectors()) {
-			System.out.println(connector.name());
-			if ("com.sun.jdi.SocketAttach".equals(connector.name())) {
-				return (AttachingConnector) connector;
-			}
-		}
-		throw new IllegalStateException();
-	}
+        public static ObjectNode getNode(Value v) 
+        {
+            if (!objectHash.containsKey(v)) {
+                objectHash.put(v, new ObjectNode(v.toString(), v.toString()));
+            }
+            return objectHash.get(v);
+        }
+    
+    public static VirtualMachine connect(int port) throws IOException {
+        String strPort = Integer.toString(port);
+        AttachingConnector connector = getConnector();
+        try {
+            VirtualMachine vm = connect(connector, strPort);
+            return vm;
+        } catch (IllegalConnectorArgumentsException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
-	private static VirtualMachine connect(AttachingConnector connector,
-			String port) throws IllegalConnectorArgumentsException, IOException {
-		Map<String, Connector.Argument> args = connector.defaultArguments();
-		Connector.Argument pidArgument = args.get("port");
-		if (pidArgument == null) {
-			throw new IllegalStateException();
-		}
-		pidArgument.setValue(port);
-		return connector.attach(args);
-	}
+    private static AttachingConnector getConnector() {
+        VirtualMachineManager vmManager = Bootstrap.virtualMachineManager();
+        for (Connector connector : vmManager.attachingConnectors()) {
+            //System.out.println(connector.name());
+            if ("com.sun.jdi.SocketAttach".equals(connector.name())) {
+                return (AttachingConnector) connector;
+            }
+        }
+        throw new IllegalStateException();
+    }
 
-	public static Vector<Node> main(String[] args)
-			throws IncompatibleThreadStateException {
+    private static VirtualMachine connect(AttachingConnector connector,
+            String port) throws IllegalConnectorArgumentsException, IOException {
+        Map<String, Connector.Argument> args = connector.defaultArguments();
+        Connector.Argument pidArgument = args.get("port");
+        if (pidArgument == null) {
+            throw new IllegalStateException();
+        }
+        pidArgument.setValue(port);
+        return connector.attach(args);
+    }
 
-		Vector<Node> tempGraph = new Vector<Node>();
-		int sfCt = 0;
-		try {
-			// establish the connection at port 8000
-			VirtualMachine vm = VMtest.connect(8000);
-			vm.suspend();
+    public static Vector<Node> main(String[] args)
+            throws IncompatibleThreadStateException {
 
-			// Get all threads from VM object
-			List<ThreadReference> threads = vm.allThreads();
-			System.out.println(threads);
+        Vector<Node> tempGraph = new Vector<Node>();
+        int sfCt = 0;
+        try {
+            // establish the connection at port 8000
+            VirtualMachine vm = VMtest.connect(8000);
+            vm.suspend();
 
-			// get list of stack frames for each thread
-			for (ThreadReference tr : threads) {
-				List<StackFrame> frames = new ArrayList<StackFrame>();
-				frames = tr.frames();
+            // Get all threads from VM object
+            List<ThreadReference> threads = vm.allThreads();
+            //System.out.println(threads);
 
-				boolean atMain = false;
+            // get list of stack frames for each thread
+            for (ThreadReference tr : threads) {
+                List<StackFrame> frames = new ArrayList<StackFrame>();
+                frames = tr.frames();
 
-				// go through stack frames and get objects
-				for (StackFrame s : frames) {
-					ObjectReference obj = s.thisObject();
-					String object = (obj == null) ? "null" : obj.toString();
-					System.out.println("Thread " + tr + " -> Frame " + s
-							+ " -> " + object);
-					if (sfCt > 10) {
-						atMain = true;
-					}
-					else
-						sfCt++;
+                boolean atMain = false;
 
-					if (atMain) {
-						FunctionNode objfunc;
-						int calledFrom = BuilderDebugger
-								.findPrevFuncNode(tempGraph);
-						if (calledFrom == -1) {
-							objfunc = new FunctionNode();
-						} else {
-							objfunc = new FunctionNode((FunctionNode) tempGraph
-									.get(calledFrom), s.toString(), String
-									.valueOf(s.hashCode()), tempGraph
-									.get(calledFrom).stackPosition + 1);
-						}
-						tempGraph.add(objfunc);
+                // go through stack frames and get objects
+                for (StackFrame s : frames) {
+                    ObjectReference obj = s.thisObject();
+                    String object = (obj == null) ? "null" : obj.toString();
+                    //System.out.println("Thread " + tr + " -> Frame " + s + " -> " + object);
+                    if (sfCt > 10) {
+                        atMain = true;
+                    }
+                    else
+                        sfCt++;
 
-						try {
-							// for each visible variable, get the value
-							for (LocalVariable lv : s.visibleVariables()) {
-								System.out.println(" local: " + lv.name()
-										+ " = " + s.getValue(lv));
+                    if (atMain) {
+                        FunctionNode objfunc;
+                        int calledFrom = BuilderDebugger
+                                .findPrevFuncNode(tempGraph);
+                        if (calledFrom == -1) {
+                            objfunc = new FunctionNode();
+                        } else {
+                            objfunc = new FunctionNode(
+                                            (FunctionNode) tempGraph.get(calledFrom), 
+                                            s.toString(), 
+                                            String.valueOf(s.hashCode()), 
+                                            tempGraph.get(calledFrom).stackPosition + 1);
+                        }
+                        tempGraph.add(objfunc);
 
-								
-								ObjectNode objlv;
-								if (objectHash.contains(s.getValue(lv)))
-									objlv = objectHash.get(s.getValue(lv));
-								else {
-									objlv = new ObjectNode(lv.name(), s.getValue(lv).toString());
-									tempGraph.add(objlv);
-									objectHash.put(s.getValue(lv), objlv);
-								}
-								
-								objfunc.ObjectsConnectedTo.put(lv.name(), objlv);
+                        try {
+                            // for each visible variable, get the value
+                            for (LocalVariable lv : s.visibleVariables()) {
+                                //System.out.println(" local: " + lv.name() + " = " + s.getValue(lv));
+                                
+                                Value v = s.getValue(lv);
+                                ObjectNode objlv = getNode(v);
+                                objfunc.addConnection(lv.toString(), objlv);
 
-								// do recursive search 
-								if( !remember.contains(s.getValue(lv)))
-									search(s.getValue(lv), tempGraph, objlv);
-							}
-							if (object != "null") {
-								// look through fields and get values
-								List<Field> fields = obj.referenceType().fields();
-								for (Field f : fields) {
-									if (f.typeName() == null) {
-									} else {
-										Value fval = obj.getValue(f);
-										System.out.println("***** field name "
-												+ f.name()
-												+ " ****field value " + fval
-												+ " *****type " + f.typeName());
-									}
-								}
-							}
-						} catch (AbsentInformationException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
+                                // do recursive search 
+                                search(v, tempGraph);
+                            }
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+                            if (!object.equals("null")) {
+                                // look through fields and get values
+                                List<Field> fields = obj.referenceType().fields();
+                                for (Field f : fields) {
+                                    if (f.typeName() == null) {
+                                    } else {
+                                        Value fval = obj.getValue(f);
+                                        search(fval, tempGraph);
+                                        //System.out.println("***** field name " + f.name() + " ****field value " + fval + " *****type " + f.typeName());
+                                    }
+                                }
+                            }
+                        } catch (AbsentInformationException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
 
-		return tempGraph;
-	}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	// recursive search method to look through all values of the local variables
-	public static void search(Value v, Vector<Node> tempGraph,
-			ObjectNode current) {
-		
-		if (v instanceof ObjectReference) {
-			ObjectReference obj = (ObjectReference) v;
-			List<Field> fields = obj.referenceType().fields();
+        return tempGraph;
+    }
 
-			for (int i = 0; i < fields.size(); i++) {
-				Value fval = obj.getValue(fields.get(i));
+    // recursive search method to look through all values of the local variables
+    public static void search(Value v, Vector<Node> tempGraph) {
+        ObjectNode current = getNode(v);
 
-				if (fval == null || fval.equals(null))
-					continue;
+        if (remember.contains(v))
+            return;
+        remember.add(v);
+        
+        if (v instanceof ObjectReference) {
+            ObjectReference obj = (ObjectReference) v;
+            List<Field> fields = obj.referenceType().fields();
 
-				else if (!remember.contains(fval)) {
-					if (fval.toString().startsWith("instance")) {
-						System.out.println(fields.get(i) + " -> "
-								+ fval.type().name() + " " + fval);
-						
-						if (objectHash.containsKey(fval))
-							tempObj = objectHash.get(fval);
-						else {
-							tempObj = new ObjectNode(fields.get(i).toString(), fval.toString());
-							tempGraph.add(tempObj);
-							remember.add(fval);
-							objectHash.put(fval, tempObj);
-						}
-						
-						tempInstOf = fields.get(i).toString();
-						tempObj.name = tempInstOf;
-						tempObj.ObjectsConnectedTo.put(tempInstOf, current);
-						search(fval, tempGraph, tempObj);
-					}
-				} else {
-					tempObj = objectHash.get(fval);
-					tempInstOf = fields.get(i).toString();
-					//tempObj.name = tempInstOf;
-					tempObj.ObjectsConnectedTo.put(tempInstOf, current);	
-				}
-			}
-		} 
-	}
+            for (int i = 0; i < fields.size(); i++) {
+                Field f = fields.get(i);
+                Value fval = obj.getValue(f);
+
+                if (fval == null || fval.equals(null))
+                    continue;
+
+                if (fval.toString().startsWith("instance")) {
+                    //System.out.println(f + " -> " + fval.type().name() + " " + fval);
+                    
+                    ObjectNode tempObj = getNode(fval);
+                    if (!tempGraph.contains(tempObj))
+                        tempGraph.add(tempObj);
+
+                    current.addConnection(f.toString(), tempObj);
+                    search(fval, tempGraph);
+                }
+            }
+        } 
+    }
 }
-//in output of graph head and tail should be names on the edges -- instance of... should be the name of the node
